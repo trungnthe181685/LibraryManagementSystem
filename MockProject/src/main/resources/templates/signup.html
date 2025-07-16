@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Sign Up</title>
+		<!--Bootstrap CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+				
+		<!-- Bootstrap Icons -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+		
+		<!-- Internal CSS -->
+		<style>
+			body, html {
+				height: 100vh;
+				margin: 0;
+				padding: 0;
+				overflow: hidden;
+			}
+			body {
+				background-color: rgb(33, 42, 48);
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 0;
+			}
+
+			.signup-container {
+				width: 500px;
+				height: 550px;
+				margin: 30px auto;
+				background-color: black;
+				padding: 30px;
+				color: white;
+				text-align: center;
+				border-radius: 12px;
+				justify-content: center;
+			}
+
+			.signup-box {
+				padding: 20px;
+			}
+
+			.form-control {
+				background-color: rgb(0, 0, 0);
+				width: 300px;
+				height: 50px;
+				margin-bottom: 15px;
+				border-color: dimgrey;
+				margin: 15px auto;
+			}
+
+			.form-control:focus {
+				border: none;
+				outline: 2px solid dodgerblue;
+				outline-offset: 2px;
+				background-color: black;
+				color: white;
+			}
+
+			.submit-button {
+				display: flex;
+				width: 300px;
+				justify-content: center;
+				padding: 5px 20px;
+				border-radius: 30px;
+				margin: 20px auto;
+				font-size: 15px;
+				font-weight: 300;
+				font-family: Arial, Helvetica, sans-serif;
+				border: none;
+				color: black;
+				background-color: white;
+			}
+
+			.submit-button:hover {
+				background-color: rgba(105, 105, 105, 0.5);
+			}
+
+			.btn-exit {
+				background-color: black;
+				color: white;
+				border: none;
+				border-radius: 50px;
+				margin-right: 450px;
+				font-size: 25px;
+				margin-top: -40px;
+				margin-bottom: -20px;
+			}
+
+			.btn-exit:hover {
+				background-color: rgba(255, 255, 255, 0.2);
+			}
+					
+			footer {
+				background-color: rgb(33, 42, 48);
+				text-align: center;
+			}
+			.footer-links {
+				list-style: none;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				padding: 0;
+				margin-bottom: 15px;
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: x-small;
+			}
+
+			.footer-links li {
+				position: relative;
+				padding: 0 10px;
+				color: dimgray;
+			}
+
+			.footer-links li:not(:last-child)::after {
+				content: "|";
+				position: absolute;
+				right: 0;
+				color: dimgrey;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="signup-container">
+			<button class="btn-exit" type="button" onclick="window.location.href='/index'"><i class="bi bi-x"></i></button>
+			<h2 class="mb-3" style="font-size: 60px;">b<i class="bi bi-book"></i>k</h2>
+			<p class="mb-2"style="font-size: 30px;">Sign Up</p>
+			<div class="signup-box">
+				<form th:action="@{/signup}" method="post">
+					<input type="text" class="form-control" name="name" placeholder="Name" required/>
+					<input type="email" class="form-control" name="email" placeholder="Phone, Username or Email" required />
+					<input type="password" class="form-control" name="password" placeholder="Password" required />
+					<input type="submit" class="submit-button" value="Sign Up" />
+				</form>
+			</div>
+			<p style="font-size: 15px;font-family: Arial, Helvetica, sans-serif;font-weight: 100;color: dimgrey;">
+			Already have an account? <a href="/login">Login</a></p>
+		</div>
+		<footer>
+			<ul class="footer-links">
+				<li>About</li>
+				<li>Terms of Service</li>
+				<li>Privacy Policy</li>
+				<li>Cookie Policy</li>
+				<li>Developers</li>
+				<li>Sponsors</li>
+				<li>Settings</li>
+				<li><span>&copy; 2025. All rights reserved.</span></li>
+			</ul>
+		</footer>
+
+		<!-- Bootstrap JS -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+	</body>
+</html>

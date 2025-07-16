@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>Library Management System</title>
+		<!--Bootstrap CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+		
+		<!-- Bootstrap Icons -->
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+		
+		<!-- Internal CSS -->
+		<style>
+			.hero {
+					height: 100vh;
+					display: flex;
+					margin-top: 50px;
+					justify-content: center;
+					text-align: center;
+					color: #f5eeee;
+					
+				}
+				.hero h1{
+					font-size: 5rem;
+				}
+			
+			.ui-button {
+				display: flex;
+				margin-top: 30px;
+				background: white;
+				color: black;
+				align-items: center;
+				justify-content: center;
+				padding: 7px 80px;
+				text-decoration: none;
+				border-radius: 30px;
+				font-size: 15px;
+				font-weight: bold;
+				font-family: Arial, Helvetica, sans-serif;
+				gap: .75rem;
+			}
+			
+			.ui-button:hover {
+				background-color: gainsboro;
+			}
+			
+			.ui-button:focus {
+				outline: 2px solid lightgray;
+				outline-offset: 2px;
+			}
+			
+			.icon {
+				font-size: 15px;
+			}
+			
+			.label {
+				font-weight: 100;
+			}
+			
+			.divider {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 15px;
+				font-weight: lighter;
+				width: 100%;
+				gap: 5px;
+			}
+			
+			.divider hr {
+				flex: 1;
+				border: 0;
+				height: .5px;
+				background-color: lightgrey;
+				margin-top: 35px;
+				margin-bottom: 35px;
+			}
+			
+			.divider span{
+				padding: 0 10px;
+				color: lightgrey;
+				background-color: black;
+			}
+			
+			html, body {
+				height: 100%;
+				margin: 0;
+			}
+			
+			body {
+				display: flex;
+				flex-direction: column;
+				background-color: black;
+				font-family: Arial, sans-serif;
+			}
+			
+			.text-0 {
+				color: dimgrey;
+				font-size: 10px;
+				font-weight: lighter;
+				margin-top: 10px;
+			}
+			
+			.text-0 a {
+				color: dodgerblue;
+				text-decoration: none;
+			}
+			
+			.text-1 {
+				margin-top: 25px;
+				font-size: 13px;
+				font-weight: bold;
+			}
+			
+			footer {
+				
+				background-color: black;
+				text-align: center;
+			}
+			
+			.footer-links {
+				list-style: none;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				padding: 0;
+				margin-bottom: 15px;
+				font-family: Arial, Helvetica, sans-serif;
+				font-size: x-small;
+			}
+			
+			.footer-links li {
+				position: relative;
+				padding: 0 10px;
+				color: dimgray;
+			}
+			
+			.footer-links li:not(:last-child)::after {
+				content: "|";
+				position: absolute;
+				right: 0;
+				color: dimgrey;
+			}
+			
+			.footer-links a {
+				text-decoration: none;
+				color: dimgrey;
+			}
+			
+			.footer-links a:hover {
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+	<body>
+		<section class="hero">
+			<div>
+				<h1>b<i class="bi bi-book"></i>k</h1>
+				<p style="font-size: 20px;">Create an account</p>
+				
+				<a href="/oauth2/authorization/google" class="ui-button google">
+					<span class="icon" aria-hidden="true">
+						<i class="bi bi-google"></i>
+					</span>
+					<span class="label">Login with Google</span>
+				</a>
+				
+				<a href="/oauth2/authorization/facebook" class="ui-button facebook" style="margin-top: 15px;">
+					<span class="icon" aria-hidden="true">
+						<i class="bi bi-facebook"></i>
+					</span>
+					<span class="label">Login with Facebook</span>
+				</a>
+				
+				<div class="divider">
+					<hr>
+					<span>OR</span>
+					<hr>
+				</div>
+				<a href="/signup" class="ui-button" style="margin-top: 0;">Create account</a>
+				<p class="text-0">By signing up, you agree to the <a href="/terms">Terms of Service</a> and <a href="/policy">Privacy<br>Policy</a>, including <a href="/cookie">Cookie Use</a></p>
+				<p class="text-1">Already have an account?</p>
+				<a href="/login" class="ui-button" style="color: dodgerblue; font-weight: 100; margin-top: 0;">Login</a>
+			</div>
+		</section>
+		
+		<!-- Footer -->
+		<footer>
+			<ul class="footer-links">
+				<li><a href="/about">About</a></li>
+				<li><a href="/terms">Terms of Service</a></li>
+				<li><a href="/policy">Privacy Policy</a></li>
+				<li><a href="/cookie">Cookie Policy</a></li>
+				<li><a href="/developer">Developers</a></li>
+				<li><a href="/sponsor">Sponsors</a></li>
+				<li><a href="/setting">Settings</a></li>
+				<li><span>&copy; 2025. All rights reserved.</span></li>
+			</ul>
+		</footer>
+		
+		<!-- Bootstrap JS -->
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+	</body>
+	
+</html>
