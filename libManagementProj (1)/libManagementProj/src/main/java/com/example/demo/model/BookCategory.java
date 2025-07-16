@@ -1,9 +1,12 @@
 package com.example.demo.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 
 @Entity
 public class BookCategory {
@@ -13,6 +16,9 @@ public class BookCategory {
 
 	private String bookCatName;
 
+	@ManyToMany(mappedBy = "categories")
+    private List<Book> books;
+	
 	public Long getBookCategoryID() {
 		return bookCategoryID;
 	}

@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Reservation {
@@ -26,6 +28,9 @@ public class Reservation {
 	@JoinColumn(name = "bookID")
 	private Book book;
 
+	@OneToMany(mappedBy = "reservation")
+    private List<BorrowRecord> borrowRecords;
+	
 	public Long getReservationID() {
 		return reservationID;
 	}
