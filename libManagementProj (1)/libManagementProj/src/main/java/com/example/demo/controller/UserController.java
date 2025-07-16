@@ -83,7 +83,7 @@ public class UserController {
 		book.setAvailableCopies(bookDetails.getAvailableCopies());
 		book.setImageURL(bookDetails.getImageURL());
 		book.setAuthor(bookDetails.getAuthor());
-		book.setBookCategory(bookDetails.getBookCategory());
+		book.setCategories(bookDetails.getCategories());
 		bookRepository.save(book);
 		return "redirect:/books";
 	}
