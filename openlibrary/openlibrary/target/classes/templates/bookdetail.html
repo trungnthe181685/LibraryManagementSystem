@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book Detail</title>
+  <link rel="stylesheet" href="/css/kiet.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+ </head>
+<body>
+	
+	<nav class="navbar">
+	  <div class="nav-container">
+	    <a href="/home" class="logo">B<i class="bi bi-book"></i>K</a>
+	    <div class="nav-right">
+	      <form class="search-form" action="/search" method="get">
+	        <input type="text" name="query" placeholder="Search books...">
+	        <button type="submit">Search</button>
+	      </form>
+
+	      <div class="nav-links">
+	        <a href="/category" class="nav-link">Categories</a>
+	        <a href="/myaccount" class="nav-link">My Account</a>
+	      </div>
+	    </div>
+	  </div>
+	</nav>
+
+  <main class="book-detail-container">
+    <div class="book-detail-card">
+      <img src="/book cover/OIP.png" alt="Book Cover" class="book-detail-cover" />
+      <div class="book-detail-info">
+        <h1 class="book-title">Example Book Title</h1>
+        <h3 class="book-author">by Author Name</h3>
+        <p class="book-price">$15.99</p>
+        <p class="book-description">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+          This is a detailed description of the book. It includes the plot, 
+          highlights, author’s note, and other relevant information.
+        </p>
+        <button class="buy-button">Buy Now</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
