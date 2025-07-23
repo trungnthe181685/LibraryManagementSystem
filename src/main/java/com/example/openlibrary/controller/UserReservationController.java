@@ -1,0 +1,57 @@
+package com.example.openlibrary.controller;
+
+import com.example.openlibrary.model.Book;
+import com.example.openlibrary.model.Reservation;
+import com.example.openlibrary.model.User;
+import com.example.openlibrary.repository.BookRepository;
+import com.example.openlibrary.repository.ReservationRepository;
+
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.time.LocalDate;
+
+@Controller
+@RequestMapping("/user/reservations")
+public class UserReservationController {
+
+	@Autowired
+	private BookRepository bookRepository;
+
+	@Autowired
+	private ReservationRepository reservationRepository;
+
+	@PostMapping("/borrow/{bookId}")
+	public String borrowBook(@PathVariable Long bookId, HttpSession session, RedirectAttributes redirectAttrs) {
+		User user = (User) session.getAttribute("user");
+		if (user == null) {
+			return "redirect:/login";
+		}
+
+		Book book = bookRepository.findById(bookId).orElse(null);
+		if (book == null || book.getAvailableCopies() <= 0) {
+			redirectAttrs.addFlashAttribute("message", "Book not available.");
+			return "redirect:/books";
+		}
+
+		// Create a reservation
+		Reservation reservation = new Reservation();
+		reservation.setBook(book);
+		reservation.setUser(user);
+		reservation.setCreatedDate(LocalDate.now());
+		reservation.setStatus(Reservation.Status.RESERVED);
+
+		reservationRepository.save(reservation);
+
+		int activeReservations = reservationRepository.countActiveReservationsByBook(book);
+		book.setAvailableCopies(Math.max(book.getTotalCopies() - activeReservations, 0));
+		book.setStock(book.getAvailableCopies() > 0 ? "In Stock" : "Out of Stock");
+		bookRepository.save(book);
+
+		redirectAttrs.addFlashAttribute("message", "Book reserved successfully!");
+		return "redirect:/books";
+	}
+}

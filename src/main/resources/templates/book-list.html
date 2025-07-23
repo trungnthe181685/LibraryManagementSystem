@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Book List</title>
+	<link rel="stylesheet" href="/css/kiet.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+
+<body>
+
+	<!-- Include navbar here -->
+	<div th:replace="navbar :: navbar"></div>
+
+	<h1>All Books</h1>
+
+	<form method="get" action="/books">
+		<!-- Multi-select categories with checkboxes -->
+		<label>Categories:</label><br />
+		<div th:each="cat : ${categories}">
+			<input type="checkbox" name="categoryIds" th:value="${cat.bookCategoryID}"
+				th:checked="${selectedCategoryIds != null and selectedCategoryIds.contains(cat.bookCategoryID)}" />
+
+			<span th:text="${cat.bookCatName}"></span><br />
+		</div>
+
+		<!-- Author dropdown -->
+		<label for="author">Author:</label>
+		<select name="authorId" id="author">
+			<option value="">All</option>
+			<option th:each="a : ${authors}" th:value="${a.authorID}" th:text="${a.authorName}"
+				th:selected="${a.authorID == selectedAuthorId}">
+			</option>
+		</select>
+
+		<!-- Year input -->
+		<label for="year">Published Year:</label>
+		<input type="number" name="year" id="year" placeholder="e.g. 2023" th:value="${selectedYear}" />
+
+		<br /><button type="submit">Filter</button>
+	</form>
+
+
+
+	<ul>
+		<li th:each="book : ${books}">
+			<a th:href="@{/books/{id}(id=${book.bookID})}">
+				<img th:src="${book.imageURL}" alt="Book Cover" width="100" height="150" />
+			</a>
+			<a th:href="@{/books/{id}(id=${book.bookID})}" th:text="${book.bookName}">Book Name</a>
+			- <span th:text="${book.author != null ? book.author.authorName : 'N/A'}">Author</span>
+			- <span th:text="${book.publishedDate}">Date</span>
+			<br />
+
+			<form th:action="@{/user/reservations/borrow/{id}(id=${book.bookID})}" method="post">
+				<button type="submit" th:disabled="${book.availableCopies == 0}" class="btn btn-primary btn-sm">
+					<i class="bi bi-bookmark-check"></i> Borrow
+				</button>
+			</form>
+		</li>
+	</ul>
+
+
+
+
+</body>
+
+</html>

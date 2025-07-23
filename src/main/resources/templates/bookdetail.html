@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title th:text="${book.bookName}">Book Detail</title>
+  <link rel="stylesheet" href="/css/kiet.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+<body>
+
+  <!-- Include navbar here -->
+  <div th:replace="navbar :: navbar"></div>
+
+  <main class="book-detail-container">
+    <div class="book-detail-card">
+      <img th:src="${book.imageURL}" alt="Book Cover" class="book-detail-cover" />
+      <div class="book-detail-info">
+        <h1 class="book-title" th:text="${book.bookName}">Example Book Title</h1>
+        <h3 class="book-author" th:text="'by ' + ${book.author.authorName}">by Author Name</h3>
+        <p class="book-price" th:text="'$' + ${book.rentalPrice}">$15.99</p>
+        <p class="book-description" th:text="${book.description}">
+          Book description goes here...
+        </p>
+		<div class="book-categories">
+		        <strong>Categories:</strong>
+		        <span th:each="cat : ${book.categories}" th:text="${cat.bookCatName} " class="category-label">Category</span>
+		</div>
+		
+        <button class="buy-button">Borrow Now</button>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

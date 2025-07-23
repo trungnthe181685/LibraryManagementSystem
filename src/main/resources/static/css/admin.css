@@ -1,0 +1,188 @@
+/* Layout Reset */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f2f4f7;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+  max-width: 900px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  text-align: center;
+}
+
+.list-group-item {
+  background-color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.25s ease-in-out;
+}
+
+.list-group-item:hover {
+  background-color: #f0f4ff;
+  transform: translateX(4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  color: #0d6efd;
+  cursor: pointer;
+}
+
+.list-group-item i {
+  font-size: 1.2rem;
+  color: #0d6efd;
+}
+
+.list-group-item a {
+  text-decoration: none;
+  color: #0d6efd;
+  font-weight: 500;
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+
+/* Title and Subtitle */
+h1 {
+  font-size: 2.4rem;
+  margin-bottom: 0.5rem;
+  color: #2b2b2b;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Card Grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* Card Style */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.2rem;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+}
+
+.card:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px);
+}
+
+/* Icon inside card */
+.card i {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Text inside card */
+.card span {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+}
+
+th, td {
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background-color: #f0f0f0;
+}
+
+/* Buttons / Actions */
+a.action-button {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background-color: #28a745;
+  color: white;
+  border-radius: 3px;
+  text-decoration: none;
+  margin-right: 0.5rem;
+}
+
+a.action-button:hover {
+  background-color: #218838;
+}
+
+a.delete-button {
+  background-color: #dc3545;
+}
+
+a.delete-button:hover {
+  background-color: #c82333;
+}
+
+/* Form styles */
+form {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 500px;
+}
+
+label {
+  display: block;
+  margin: 1rem 0 0.3rem;
+  font-weight: bold;
+}
+
+input, select, button {
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

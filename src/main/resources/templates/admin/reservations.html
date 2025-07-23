@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Manage Reservations</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+<h1>Manage Reservations</h1>
+
+<div class="container mt-4">
+  <a href="/admin/dashboard" class="btn btn-outline-secondary">← Back to Admin Dashboard</a>
+</div>
+
+<div th:if="${message}" class="toast success" th:text="${message}"></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Book</th>
+      <th>User</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="r : ${reservations}">
+      <td th:text="${r.reservationID}"></td>
+      <td th:text="${r.book.bookName}"></td>
+      <td th:text="${r.user.name}"></td>
+      <td th:text="${r.createdDate}"></td>
+      <td th:text="${r.status}"></td>
+      <td>
+        <a th:if="${r.status.name() == 'RESERVED'}"
+           th:href="@{'/admin/reservations/return/' + ${r.reservationID}}"
+           onclick="return confirm('Mark this reservation as returned?')"
+           class="btn btn-success">Return</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
