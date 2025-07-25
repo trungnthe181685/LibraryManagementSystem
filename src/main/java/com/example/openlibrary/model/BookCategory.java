@@ -34,4 +34,14 @@ public class BookCategory {
 	public void setBookCatName(String bookCatName) {
 		this.bookCatName = bookCatName;
 	}
+
+	public List<Book> getBooks() {
+		return books;
+	}
+
+	public void setBooks(List<Book> books) {
+		this.books = books;
+	}
+	
+	
 }

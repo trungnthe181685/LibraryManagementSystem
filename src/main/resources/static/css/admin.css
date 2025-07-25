@@ -161,6 +161,14 @@ form {
   max-width: 500px;
 }
 
+form.inline-form {
+  width: auto;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+
 label {
   display: block;
   margin: 1rem 0 0.3rem;

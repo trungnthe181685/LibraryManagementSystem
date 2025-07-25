@@ -1,16 +1,23 @@
 package com.example.openlibrary.controller;
 
 import com.example.openlibrary.model.Book;
+import com.example.openlibrary.model.BorrowRecord;
 import com.example.openlibrary.model.Reservation;
 import com.example.openlibrary.repository.BookRepository;
+import com.example.openlibrary.repository.BorrowRecordRepository;
 import com.example.openlibrary.repository.ReservationRepository;
+
+import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -19,6 +26,9 @@ public class AdminReservationController {
 
     @Autowired
     private ReservationRepository reservationRepo;
+    
+    @Autowired
+    private BorrowRecordRepository borrowRecordRepo;
 
     @Autowired
     private BookRepository bookRepo;
@@ -29,23 +39,73 @@ public class AdminReservationController {
         return "admin/reservations";
     }
 
-    @GetMapping("/return/{id}")
-    public String markAsReturned(@PathVariable Long id, RedirectAttributes redirectAttrs) {
+    @GetMapping("/update-status/{id}")
+    public String updateReservationStatus(
+            @PathVariable Long id,
+            @RequestParam("status") Reservation.Status newStatus,
+            RedirectAttributes redirectAttrs) {
+
         Reservation reservation = reservationRepo.findById(id).orElse(null);
 
-        if (reservation != null && reservation.getStatus() == Reservation.Status.RESERVED) {
-            reservation.setStatus(Reservation.Status.RETURNED);
+        if (reservation != null && reservation.getStatus() != newStatus) {
+            reservation.setStatus(newStatus);
             reservationRepo.save(reservation);
 
-            Book book = reservation.getBook();
-            int active = reservationRepo.countActiveReservationsByBook(book);
-            book.setAvailableCopies(Math.max(book.getTotalCopies() - active, 0));
-            book.setStock(book.getAvailableCopies() > 0 ? "In Stock" : "Out of Stock");
-            bookRepo.save(book);
+            // If status is RETURNED, update book availability
+            if (newStatus == Reservation.Status.RETURNED) {
+                Book book = reservation.getBook();
+                int active = reservationRepo.countActiveReservationsByBook(book);
+                book.setAvailableCopies(Math.max(book.getTotalCopies() - active, 0));
+                book.setStock(book.getAvailableCopies() > 0 ? "In Stock" : "Out of Stock");
+                bookRepo.save(book);
+            }
 
-            redirectAttrs.addFlashAttribute("message", "Reservation marked as returned.");
+            redirectAttrs.addFlashAttribute("message", "Reservation status updated to " + newStatus.name());
+        } else {
+            redirectAttrs.addFlashAttribute("message", "No change made or reservation not found.");
         }
+
         return "redirect:/admin/reservations";
     }
+    
+    @GetMapping("/reservations/{id}/records")
+    public String viewBorrowRecords(@PathVariable Long id, Model model) {
+        Reservation reservation = reservationRepo.findById(id).orElse(null);
+
+        if (reservation == null) {
+            return "redirect:/admin/reservations";
+        }
+
+        List<BorrowRecord> records = borrowRecordRepo.findByReservation(reservation);
+        model.addAttribute("reservation", reservation);
+        model.addAttribute("records", records);
+
+        return "admin/borrow_records"; // Create this Thymeleaf view
+    }
+    
+    @GetMapping("/reservations/add-auto/{reservationID}")
+    public String autoAddBorrowRecord(@PathVariable Long reservationID, RedirectAttributes redirectAttrs) {
+        Reservation reservation = reservationRepo.findById(reservationID).orElse(null);
+        if (reservation == null) {
+            redirectAttrs.addFlashAttribute("message", "Reservation not found.");
+            return "redirect:/admin/reservations";
+        }
+
+        BorrowRecord record = new BorrowRecord();
+        LocalDate now = LocalDate.now();
+
+        record.setBorrowDate(now);
+        record.setReturnDate(null);
+        record.setStatus("BORROWING");
+        record.setReservation(reservation);
+
+        borrowRecordRepo.save(record);
+        redirectAttrs.addFlashAttribute("message", "Borrow record added.");
+
+        return "redirect:/admin/reservations";
+    }
+
+
+
 }
 

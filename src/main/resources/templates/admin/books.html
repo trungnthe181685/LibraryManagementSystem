@@ -45,7 +45,7 @@
     <tbody>
     <tr th:each="book : ${books}">
       <td th:text="${book.bookName}"></td>
-      <td th:text="${book.author.authorName}"></td>
+      <td th:text="${book.author != null ? book.author.authorName : 'N/A'}"></td>
       <td th:text="${book.description}"></td>
       <td th:text="${book.totalCopies}"></td>
       <td th:text="${book.availableCopies}"></td>
@@ -176,7 +176,7 @@
               <option th:each="author : ${authors}"
                       th:value="${author.authorID}"
                       th:text="${author.authorName}"
-                      th:selected="${author.authorID == book.author.authorID}">
+                      th:selected="${book.author != null ? author.authorID == book.author.authorID : false}">
               </option>
             </select>
           </div>
@@ -214,7 +214,8 @@
 		  		      <option value="">Select publisher</option>
 		  		      <option th:each="pub : ${publishers}" 
 		  		              th:value="${pub.publisherID}" 
-		  		              th:text="${pub.name}">
+		  		              th:text="${pub.name}"
+							  th:selected="${pub.publisherID == book.publisher.publisherID}">
 		  		      </option>
 		  		    </select>
 		  		  </div>

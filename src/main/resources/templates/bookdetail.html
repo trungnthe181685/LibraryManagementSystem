@@ -16,7 +16,7 @@
       <img th:src="${book.imageURL}" alt="Book Cover" class="book-detail-cover" />
       <div class="book-detail-info">
         <h1 class="book-title" th:text="${book.bookName}">Example Book Title</h1>
-        <h3 class="book-author" th:text="'by ' + ${book.author.authorName}">by Author Name</h3>
+        <h3 class="book-author" th:text="'by ' + ${book.author != null ? book.author.authorName : 'N/A'}">by Author Name</h3>
         <p class="book-price" th:text="'$' + ${book.rentalPrice}">$15.99</p>
         <p class="book-description" th:text="${book.description}">
           Book description goes here...

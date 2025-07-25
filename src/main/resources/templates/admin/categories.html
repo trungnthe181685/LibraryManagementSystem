@@ -42,7 +42,7 @@
             <button class="btn btn-sm btn-danger flex-fill"
                     data-bs-toggle="modal"
                     data-bs-target="#confirmDeleteModal"
-                    th:attr="data-id=${c.bookCategoryID}, data-name=${c.bookCatName}, data-url='/admin/categories/delete'">
+                    th:attr="data-id=${c.bookCategoryID}, data-name=${c.bookCatName}, data-url='/admin/categories/delete-category'">
               Delete
             </button>
 			</div>
@@ -99,7 +99,8 @@
   <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
-        <form id="deleteForm" method="get">
+        <form id="deleteForm" method="post">
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
           <div class="modal-header">
             <h5 class="modal-title">Confirm Delete</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>

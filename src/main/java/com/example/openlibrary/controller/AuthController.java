@@ -1,5 +1,7 @@
 package com.example.openlibrary.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -38,7 +40,11 @@ public class AuthController {
         User user = userRepository.findByEmailAndPassword(email, password);
         if (user != null) {
             session.setAttribute("user", user);
-            return "redirect:/home";
+            if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+                return "redirect:/admin/dashboard";
+            } else {
+                return "redirect:/home";
+            }
         } else {
             model.addAttribute("error", "Invalid credentials");
             return "login";
@@ -63,6 +69,7 @@ public class AuthController {
         newUser.setName(name);
         newUser.setEmail(email);
         newUser.setPassword(password);
+        newUser.setCreatedDate(LocalDate.now());
         userService.saveUser(newUser);
 
         return "redirect:/login";

@@ -4,6 +4,7 @@ import com.example.openlibrary.model.Author;
 import com.example.openlibrary.model.Book;
 import com.example.openlibrary.model.BookCategory;
 import com.example.openlibrary.model.Publisher;
+import com.example.openlibrary.model.Reservation;
 import com.example.openlibrary.repository.AuthorRepository;
 import com.example.openlibrary.repository.BookCategoryRepository;
 import com.example.openlibrary.repository.BookRepository;
@@ -13,6 +14,7 @@ import com.example.openlibrary.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -120,10 +122,38 @@ public class AdminBookController {
 		return "redirect:/admin/books";
 	}
 
+	
+	@Transactional
 	@PostMapping("/delete/{id}")
 	public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-		bookRepository.deleteById(id);
-		redirectAttributes.addFlashAttribute("toastMessage", "Book deleted successfully!");
-		return "redirect:/admin/books";
+	    Optional<Book> optionalBook = bookRepository.findById(id);
+	    if (optionalBook.isPresent()) {
+	        Book book = optionalBook.get();
+
+	        // 1. Remove related reservations
+	        if (book.getReservations() != null) {
+	            for (Reservation reservation : book.getReservations()) {
+	            	reservationRepository.delete(reservation); // you must have reservationRepo
+	            }
+	        }
+
+	        // 2. Clear many-to-many relation with categories
+	        book.getCategories().clear();
+	        bookRepository.save(book); // update the book to reflect changes before deletion
+
+	        // 3. Optional: Clear author and publisher references
+	        book.setAuthor(null);
+	        book.setPublisher(null);
+
+	        // 4. Finally delete the book
+	        bookRepository.delete(book);
+
+	        redirectAttributes.addFlashAttribute("toastMessage", "Book deleted successfully!");
+	    } else {
+	        redirectAttributes.addFlashAttribute("toastMessage", "Book not found!");
+	    }
+
+	    return "redirect:/admin/books";
 	}
+
 }

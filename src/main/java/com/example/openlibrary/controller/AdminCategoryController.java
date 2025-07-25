@@ -1,10 +1,15 @@
 package com.example.openlibrary.controller;
 
+import com.example.openlibrary.model.Book;
 import com.example.openlibrary.model.BookCategory;
 import com.example.openlibrary.repository.BookCategoryRepository;
+import com.example.openlibrary.repository.BookRepository;
+
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -15,6 +20,9 @@ public class AdminCategoryController {
 
     @Autowired
     private BookCategoryRepository categoryRepo;
+    
+    @Autowired
+    private BookRepository bookRepository;
     
     @GetMapping
     public String listCategories(Model model) {
@@ -44,10 +52,26 @@ public class AdminCategoryController {
         return "redirect:/admin/categories";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable("id") Long id, RedirectAttributes redirectAttrs) {
-        categoryRepo.deleteById(id);
-        redirectAttrs.addFlashAttribute("message", "Category deleted.");
+    @Transactional
+    @PostMapping("/delete-category/{id}")
+    public String deleteCategory(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Optional<BookCategory> optionalCategory = categoryRepo.findById(id);
+        if (optionalCategory.isPresent()) {
+            BookCategory category = optionalCategory.get();
+
+            // Remove the category from all associated books
+            for (Book book : category.getBooks()) {
+                book.getCategories().remove(category);
+                bookRepository.save(book); // Update the book
+            }
+
+            categoryRepo.delete(category);
+            redirectAttributes.addFlashAttribute("message", "Category deleted successfully!");
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Category not found!");
+        }
+
         return "redirect:/admin/categories";
     }
+
 }

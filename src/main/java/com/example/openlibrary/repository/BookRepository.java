@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.example.openlibrary.model.Author;
 import com.example.openlibrary.model.Book;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
@@ -25,5 +26,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 	@Query(value = "SELECT * FROM book ORDER BY RAND() LIMIT 7", nativeQuery = true)
 	List<Book> findRandomBooks();
 
-	
+	List<Book> findByAuthor(Author author);
+
 }
