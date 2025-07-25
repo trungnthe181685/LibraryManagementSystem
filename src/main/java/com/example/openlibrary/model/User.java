@@ -111,4 +111,18 @@ public class User {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+
+	public List<Reservation> getReservations() {
+		return reservations;
+	}
+
+	public void setReservations(List<Reservation> reservations) {
+		this.reservations = reservations;
+	}
+
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
+	}
+	
+	
 }
