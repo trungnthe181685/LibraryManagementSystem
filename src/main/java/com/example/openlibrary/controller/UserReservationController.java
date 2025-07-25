@@ -77,4 +77,31 @@ public class UserReservationController {
 		redirectAttrs.addFlashAttribute("message", "Book reserved successfully!");
 		return "redirect:/books";
 	}
+	
+	@GetMapping("/cancel-reservation/{id}")
+    public String cancelReservation(
+            @PathVariable Long id,
+            RedirectAttributes redirectAttrs) {
+		
+		Reservation reservation = reservationRepository.findById(id).orElse(null);
+		
+		if(reservation != null) {
+			reservation.setStatus(Reservation.Status.CANCELLED);
+			reservationRepository.save(reservation);
+			Book book = reservation.getBook();
+            int active = reservationRepository.countActiveReservationsByBook(book);
+            book.setAvailableCopies(Math.max(book.getTotalCopies() - active, 0));
+            book.setStock(book.getAvailableCopies() > 0 ? "In Stock" : "Out of Stock");
+            bookRepository.save(book);
+            
+            redirectAttrs.addFlashAttribute("message", "Cancel reservation successfully");
+		} else {
+			redirectAttrs.addFlashAttribute("message", "No change made or reservation not found.");
+		}
+		
+		
+		return "redirect:/profile?tab=reservations";
+	}
+	
+	
 }

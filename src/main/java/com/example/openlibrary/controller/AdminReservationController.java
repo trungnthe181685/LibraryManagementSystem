@@ -65,14 +65,12 @@ public class AdminReservationController {
             reservation.setStatus(newStatus);
             reservationRepo.save(reservation);
 
-            // If status is RETURNED, update book availability
-            if (newStatus == Reservation.Status.RETURNED) {
                 Book book = reservation.getBook();
                 int active = reservationRepo.countActiveReservationsByBook(book);
                 book.setAvailableCopies(Math.max(book.getTotalCopies() - active, 0));
                 book.setStock(book.getAvailableCopies() > 0 ? "In Stock" : "Out of Stock");
                 bookRepo.save(book);
-            }
+
 
             redirectAttrs.addFlashAttribute("message", "Reservation status updated to " + newStatus.name());
         } else {

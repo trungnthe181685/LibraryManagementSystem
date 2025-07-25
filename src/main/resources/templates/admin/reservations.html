@@ -37,15 +37,13 @@
       <td th:text="${r.status}"></td>
       <td>
         <div style="gap: 6px; display: flex;">
-          <a th:href="@{'/admin/reservations/update-status/' + ${r.reservationID} + '?status=RESERVED'}"
-             onclick="return confirm('Mark this reservation as reserved?')"
-             class="btn btn-success" style="width: 120px;">Reserved</a>
-          <a th:href="@{'/admin/reservations/update-status/' + ${r.reservationID} + '?status=RETURNED'}"
-             onclick="return confirm('Mark this reservation as returned?')"
-             class="btn btn-success" style="width: 120px;">Return</a>
-          <a th:href="@{'/admin/reservations/update-status/' + ${r.reservationID} + '?status=CANCELLED'}"
-             onclick="return confirm('Cancel this reservation?')"
-             class="btn btn-danger" style="width: 120px;">Cancel</a>
+			<select class="form-select" style="width: 150px;"
+			        th:attr="onchange=|updateStatus(this, '${r.reservationID}')|">
+			  <option selected disabled>Update Status</option>
+			  <option value="RESERVED">Reserved</option>
+			  <option value="RETURNED">Return</option>
+			  <option value="CANCELLED">Cancel</option>
+			</select>
           <a th:href="@{/admin/reservations/add-auto/{id}(id=${r.reservationID})}"
              onclick="return confirm('Add new borrow record now?')"
              class="btn btn-success" style="width: 120px;">Add Record</a>
@@ -163,6 +161,14 @@
       document.getElementById('editStatus').value = status;
     });
   
+	function updateStatus(selectElem, reservationID) {
+	    const status = selectElem.value;
+	    if (confirm(`Are you sure you want to mark as ${status}?`)) {
+	      window.location.href = `/admin/reservations/update-status/${reservationID}?status=${status}`;
+	    } else {
+	      selectElem.selectedIndex = 0; // Reset selection
+	    }
+	  }
 </script>
 
 
