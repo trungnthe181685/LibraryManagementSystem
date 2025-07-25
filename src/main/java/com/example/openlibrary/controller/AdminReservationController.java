@@ -8,12 +8,15 @@ import com.example.openlibrary.repository.BorrowRecordRepository;
 import com.example.openlibrary.repository.ReservationRepository;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,9 +38,20 @@ public class AdminReservationController {
 
     @GetMapping
     public String listReservations(Model model) {
-        model.addAttribute("reservations", reservationRepo.findAll());
+        List<Reservation> reservations = reservationRepo.findAll();
+
+        // Create a map to hold borrow records for each reservation
+        Map<Long, List<BorrowRecord>> recordsMap = new HashMap<>();
+        for (Reservation reservation : reservations) {
+            List<BorrowRecord> records = borrowRecordRepo.findByReservation(reservation);
+            recordsMap.put(reservation.getReservationID(), records);
+        }
+
+        model.addAttribute("reservations", reservations);
+        model.addAttribute("recordsMap", recordsMap);
         return "admin/reservations";
     }
+
 
     @GetMapping("/update-status/{id}")
     public String updateReservationStatus(
@@ -68,21 +82,6 @@ public class AdminReservationController {
         return "redirect:/admin/reservations";
     }
     
-    @GetMapping("/reservations/{id}/records")
-    public String viewBorrowRecords(@PathVariable Long id, Model model) {
-        Reservation reservation = reservationRepo.findById(id).orElse(null);
-
-        if (reservation == null) {
-            return "redirect:/admin/reservations";
-        }
-
-        List<BorrowRecord> records = borrowRecordRepo.findByReservation(reservation);
-        model.addAttribute("reservation", reservation);
-        model.addAttribute("records", records);
-
-        return "admin/borrow_records"; // Create this Thymeleaf view
-    }
-    
     @GetMapping("/add-auto/{reservationID}")
     public String autoAddBorrowRecord(@PathVariable Long reservationID, RedirectAttributes redirectAttrs) {
         Reservation reservation = reservationRepo.findById(reservationID).orElse(null);
@@ -96,6 +95,7 @@ public class AdminReservationController {
 
         record.setBorrowDate(now);
         record.setReturnDate(null);
+        record.setDueDate(now.plusWeeks(2));
         record.setStatus("BORROWING");
         record.setReservation(reservation);
 
@@ -105,7 +105,17 @@ public class AdminReservationController {
         return "redirect:/admin/reservations";
     }
 
-
+    @PostMapping("/update-record")
+    public String updateBorrowRecord(@ModelAttribute BorrowRecord record, RedirectAttributes redirectAttrs) {
+        BorrowRecord existing = borrowRecordRepo.findById(record.getBorrowID()).orElse(null);
+        if (existing != null) {
+            existing.setReturnDate(record.getReturnDate());
+            existing.setStatus(record.getStatus());
+            borrowRecordRepo.save(existing);
+            redirectAttrs.addFlashAttribute("message", "Borrow record updated.");
+        }
+        return "redirect:/admin/reservations";
+    }
 
 }
 
