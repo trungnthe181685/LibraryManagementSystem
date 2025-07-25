@@ -161,14 +161,6 @@ form {
   max-width: 500px;
 }
 
-form.inline-form {
-  width: auto;
-  padding: 0;
-  background: none;
-  box-shadow: none;
-}
-
-
 label {
   display: block;
   margin: 1rem 0 0.3rem;
@@ -194,3 +186,11 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+
+form.inline-form {
+  width: auto;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+

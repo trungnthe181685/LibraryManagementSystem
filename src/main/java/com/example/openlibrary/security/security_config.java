@@ -1,62 +1,58 @@
 package com.example.openlibrary.security;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.example.openlibrary.model.User;
 import com.example.openlibrary.repository.UserRepository;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 
 
 @EnableWebSecurity
 @Configuration
 public class security_config {
 	
+	@Autowired
+	private LoginSuccessHandler loginsuccessHandler;
+	
     @Autowired
     private UserRepository userRepository;
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
+            	.requestMatchers("/admin/**", "/profile").hasRole("admin")
+            	.requestMatchers("/profile", "/reading").hasRole("member")
                 .requestMatchers(
-                    "/", "/signup", "/login", "/index",  "/home",
-                 // ✅ allow contact form + submission
-                    "/contact", "/contact/send",      
-                    "/css/**", "/js/**", "/img/**", 
-                    "/oauth2/**", "/admin/**", "/books/**", "/categories/**", "/profile/**", "/promo/**", "/search/**", "/user/**", "/reservations/**"
+                    "/", "/signup", "/login", "/index",  "/home",  
+                    "/css/**", "/js/**", "/oauth2/**", "/categories/**", "/profile/**", "/promo/**", "/search/**", "/user/**", "/reservations/**"
                 ).permitAll()
-                .requestMatchers("/admin/**").access((authentication, context) -> {
-                    HttpServletRequest request = context.getRequest();
-                    HttpSession session = request.getSession(false);
-                    if (session != null) {
-                        Object userObj = session.getAttribute("user");
-                        if (userObj instanceof User user && "ADMIN".equalsIgnoreCase(user.getRole())) {
-                            return new AuthorizationDecision(true);
-                        }
-                    }
-                    return new AuthorizationDecision(false);
-                })
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
                 .loginPage("/index")
-                .loginProcessingUrl("/index")
-                .defaultSuccessUrl("/home", true)
+                .loginProcessingUrl("/login")
+                .successHandler(loginsuccessHandler)
                 .permitAll()
             )
             .oauth2Login(oauth2 -> oauth2
@@ -64,12 +60,10 @@ public class security_config {
                 .defaultSuccessUrl("/home", true)
             )
             .logout(logout -> logout
-            	    .logoutUrl("/logout")
-            	    .logoutSuccessUrl("/index")
-            	    .permitAll()
-            	    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET")))
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/contact/send") 
+        	    .logoutUrl("/logout")
+        	    .logoutSuccessUrl("/index")
+        	    .permitAll()
+        	    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "GET"))
             );
 
         return http.build();
@@ -87,18 +81,19 @@ public class security_config {
             // Save to DB if not already saved
             User user = userRepository.findByEmail(email);
             if (user == null) {
-                User newUser = new User();
-                newUser.setEmail(email);
-                newUser.setName(name);
-                newUser.setRole("member");
-                userRepository.save(newUser);
+                user = new User();
+                user.setEmail(email);
+                user.setName(name);
+                user.setRole("member");
+                userRepository.save(user);
             }
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user); // You can now use it in your Thymeleaf templates
 
-            return oauth2User;
+            return new DefaultOAuth2User(
+            		List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole())),
+            		oauth2User.getAttributes(),
+            		"email"
+           ); 		
         };
-    }
 
+    }
 }

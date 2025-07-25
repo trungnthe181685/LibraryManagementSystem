@@ -57,6 +57,10 @@
 				color: white;
 			}
 			
+			.form-control::placeholder {
+				color: grey;
+			}
+			
 			.submit-button {
 				display: flex;
 				width: 300px;
@@ -135,7 +139,7 @@
 			<p class="mb-2"style="font-size: 30px;">Login</p>
 			<div class="login-box">
 				<form th:action="@{/login}" method="post">
-					<input type="email" class="form-control" name="email" placeholder="Phone, Username or Email" required />
+					<input type="email" class="form-control" name="username" placeholder="Phone, Username or Email" required />
 					<input type="password" class="form-control" name="password" placeholder="Password" required />
 					<input type="submit" class="submit-button log" value="Login" />
 					<button class="submit-button forgot" type="button" onclick="window.location.href='/forgotpassword'">Forgot Password?</button>

@@ -17,12 +17,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin/books")
@@ -53,13 +60,25 @@ public class AdminBookController {
 	@PostMapping("/add")
 	public String addBook(@RequestParam("authorID") Long authorID, @RequestParam("publisherID") Long publisherID,
 			@RequestParam(value = "categories", required = false) List<Long> bookCategoryID, @ModelAttribute Book book,
+			@RequestParam("image") MultipartFile imageFile,
 			RedirectAttributes redirectAttributes) {
 
 		Author author = authorRepository.findById(authorID).orElse(null);
 		Publisher publisher = publisherRepository.findById(publisherID).orElse(null);
 		List<BookCategory> categories = (bookCategoryID != null) ? categoryRepository.findAllById(bookCategoryID)
 				: new ArrayList<>();
-
+		try {
+	        if (!imageFile.isEmpty()) {
+	            String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+	            Path imagePath = Paths.get("src/main/resources/static/images/" + fileName);
+	            Files.createDirectories(imagePath.getParent());
+	            Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+	            book.setImageURL("/images/" + fileName);
+	        	}
+			} catch (IOException e) {
+				redirectAttributes.addFlashAttribute("toastMessage", "Image upload failed!");
+				e.printStackTrace();
+			}
 		book.setAuthor(author);
 		book.setPublisher(publisher);
 		book.setCategories(categories);
@@ -78,7 +97,9 @@ public class AdminBookController {
 			@RequestParam int totalCopies, @RequestParam double rentalPrice,
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishedDate,
 			@RequestParam("publisherID") Long publisherID, @RequestParam String imageURL, @RequestParam Long authorID,
-			@RequestParam(required = false) List<Long> categories, RedirectAttributes redirectAttributes) {
+			@RequestParam(required = false) List<Long> categories,
+			@RequestParam("image") MultipartFile imageFile, 
+			RedirectAttributes redirectAttributes) {
 
 		Optional<Book> optionalBook = bookRepository.findById(id);
 		if (optionalBook.isEmpty()) {
@@ -88,6 +109,18 @@ public class AdminBookController {
 		
 		Publisher publisher = publisherRepository.findById(publisherID).orElse(null);
 		Book book = optionalBook.get();
+		try {
+	        if (!imageFile.isEmpty()) {
+	            String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
+	            Path imagePath = Paths.get("src/main/resources/static/images/" + fileName);
+	            Files.createDirectories(imagePath.getParent());
+	            Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
+	            book.setImageURL("/images/" + fileName);
+	        	}
+			} catch (IOException e) {
+				redirectAttributes.addFlashAttribute("toastMessage", "Image upload failed!");
+				e.printStackTrace();
+			}
 		book.setBookName(bookName);
 		book.setDescription(description);
 		book.setTotalCopies(totalCopies);
@@ -121,12 +154,11 @@ public class AdminBookController {
 		redirectAttributes.addFlashAttribute("toastMessage", "Book updated successfully!");
 		return "redirect:/admin/books";
 	}
-
 	
 	@Transactional
 	@PostMapping("/delete/{id}")
 	public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-	    Optional<Book> optionalBook = bookRepository.findById(id);
+		Optional<Book> optionalBook = bookRepository.findById(id);
 	    if (optionalBook.isPresent()) {
 	        Book book = optionalBook.get();
 
@@ -155,5 +187,4 @@ public class AdminBookController {
 
 	    return "redirect:/admin/books";
 	}
-
 }

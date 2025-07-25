@@ -83,7 +83,7 @@ public class AdminReservationController {
         return "admin/borrow_records"; // Create this Thymeleaf view
     }
     
-    @GetMapping("/reservations/add-auto/{reservationID}")
+    @GetMapping("/add-auto/{reservationID}")
     public String autoAddBorrowRecord(@PathVariable Long reservationID, RedirectAttributes redirectAttrs) {
         Reservation reservation = reservationRepo.findById(reservationID).orElse(null);
         if (reservation == null) {

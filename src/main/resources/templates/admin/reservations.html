@@ -43,9 +43,10 @@
 	          <a th:href="@{'/admin/reservations/update-status/' + ${r.reservationID} + '?status=CANCELLED'}"
 	             onclick="return confirm('Cancel this reservation?')"
 	             class="btn btn-danger" style="width: 120px;">Cancel</a>
-				 <a th:href="@{/admin/reservations/add-auto/${r.reservationID}}"
-				 	             onclick="return confirm('Add new borrow record now?')"
-				 	             class="btn btn-success" style="width: 120px;">Add Record</a>
+				 <a th:href="@{/admin/reservations/add-auto/{id}(id=${r.reservationID})}"
+				    onclick="return confirm('Add new borrow record now?')"
+				    class="btn btn-success" style="width: 120px;">Add Record</a>
+
 	      </div>
 	  </td>
 
