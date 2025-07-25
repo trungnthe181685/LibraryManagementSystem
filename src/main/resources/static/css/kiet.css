@@ -1,5 +1,5 @@
 body {
-  background:  rgb(229, 229, 229);
+  background: lightgray;
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   color: #333;
@@ -8,24 +8,26 @@ body {
 
 .navbar {
 	display: flex;
-	align-items: center;
-    background: rgb(136, 136, 136);
-    color: #fff;
-    padding: 10px 20px;
 	justify-content: center;
+	align-items: center;
+    background: dimgrey;
+    color: #fff;
+    padding: 20px 40px;
 }
 
 .nav-container {
     display: flex;
-    align-items: center;
-    justify-content: left;
 }
 
 .logo {
     color: #fff;
-    font-size: 24px;
+    font-size: 54px;
     text-decoration: none;
     font-weight: bold;
+	align-items: left;
+	justify-content: center;
+	margin-left: 70px;
+	margin-right: 50px;
 }
 
 .nav-right {
@@ -35,6 +37,8 @@ body {
 }
 
 .search-form {
+	width:600px;
+	height: 30px;
     flex: 1;
     display: flex;
 	align-items: center;
@@ -43,31 +47,56 @@ body {
 
 .search-form input[type="text"] {
     flex: 1;
+	border-color: white;
+	border-width: 5px;
+	border-style: solid;
     padding: 8px;
-    border: none;
     border-radius: 4px 0 0 4px;
+	outline: none;
 }
 
 .search-form button {
     padding: 8px 16px;
-    border: none;
-    background: #fff;
+    background: orange;
+	border-color: white;
+	border-width: 5px;
+	border-style: solid;
     color: rgb(136, 136, 136);
     border-radius: 0 4px 4px 0;
     cursor: pointer;
 }
 
+.search-form button:hover {
+	background: darkorange;
+}
+
 
 .nav-links {
   display: flex;
-  justify-content: right;
+  align-items: center;
+  justify-content: center;
   gap: 20px;
 }
 
 .nav-link {
   text-decoration: none;
-  color: #333;
+  align-items: right;
+  justify-content: right;
+  color: white;
   font-weight: 500;
+  margin: 0 10px;
+}
+
+.nav-link i {
+	font-size: 20px;
+	margin-right: 6px;
+	vertical-align: middle;
+	color: white;
+	text-shadow: 
+	  0.2px 0.2px 0 currentColor, 
+	 -0.2px 0.2px 0 currentColor, 
+	  0.2px -0.2px 0 currentColor, 
+	 -0.2px -0.2px 0 currentColor;
 }
 
 .nav-link:hover {
@@ -195,16 +224,16 @@ body {
 }
 
 .product-card {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 20px;
-    text-align: center;
-    background: #fff;
-    display: flex; /* Added: Use Flexbox for layout */
-    flex-direction: column; /* Stack elements vertically */
-    justify-content: space-between; /* Ensure button stays at bottom */
-    height: 500px; /* Added: Fixed height for uniformity */
-    overflow: hidden; /* Added: Prevent overflow */
+	border: 1px solid #ddd;
+	    border-radius: 4px;
+	    padding: 20px;
+	    text-align: center;
+	    background: #fff;
+	    display: flex; /* Added: Use Flexbox for layout */
+	    flex-direction: column; /* Stack elements vertically */
+	    justify-content: space-between; /* Ensure button stays at bottom */
+	    height: 500px; /* Added: Fixed height for uniformity */
+	    overflow: hidden; /* Added: Prevent overflow */
 }
 
 .button {
@@ -314,18 +343,18 @@ body {
   margin: 0;
 }
 .readmore-btn {
-    width: auto;
-    height: 45px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    background-color: rgb(64, 0, 0);
-    border: none;
-    border-radius: 10px;
-    padding: 15px 15px;
-    gap: 0px;
-    transition: all 0.4s;
+  width: auto;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: rgb(64, 0, 0);
+  border: none;
+  border-radius: 10px;
+  padding: 15px 15px;
+  gap: 0px;
+  transition: all 0.4s;
 }
 .book-wrapper {
   display: flex;
@@ -415,15 +444,6 @@ body {
   margin-top: 30px;
 }
 
-.book-cover { /* Added: Class for <img> */
-    width: 100%;
-    max-width: 150px; /* Fixed width */
-    height: 200px; /* Fixed height */
-    object-fit: cover; /* Scale image without distortion */
-    border-radius: 4px; /* Match card's rounded corners */
-    margin: 0 auto 10px; /* Center image, add space below */
-}
-
 .book-card {
 	border: 1px solid #ddd;
 	border-radius: 4px;
@@ -458,12 +478,9 @@ body {
   flex: 1;
 }
 
-.book-title { /* Added: Class for <h3> */
-    font-size: 1.1rem;
-    margin: 10px 0;
-    overflow: hidden; /* Prevent title overflow */
-    text-overflow: ellipsis; /* Truncate long titles with ... */
-    white-space: nowrap; /* Keep title on one line */
+.book-title {
+  font-size: 2em;
+  margin-bottom: 10px;
 }
 
 .book-author {
@@ -495,17 +512,40 @@ body {
   background: #5c06a4;
 }
 
-.book-categories {
-  margin-top: 10px;
-  margin-bottom: 10px;
+.profile {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
 }
 
-.category-label {
-  background-color: #eef;
-  color: #333;
-  padding: 4px 8px;
-  border-radius: 4px;
-  margin-right: 5px;
-  display: inline-block;
-  font-size: 0.9em;
+.profile-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  right: 0;
+  padding: 0.5rem 0;
+  border-radius: 0.25rem;
+  min-width: 160px;
+}
+
+.profile:hover .profile-menu {
+  display: block;
+}
+
+.profile-menu a {
+  display: block;
+  padding: 8px 16px;
+  text-decoration: none;
+  color: black;
+}
+
+.profile-menu a:hover {
+  background-color: #f0f0f0;
+}
+
+.avatar {
+  object-fit: cover;
+  border-radius: 50%;
 }

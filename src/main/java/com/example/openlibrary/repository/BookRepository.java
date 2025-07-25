@@ -22,10 +22,11 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 		List<Book> findBooksByFilters(@Param("authorId") Long authorId,
 		                              @Param("year") Integer year,
 		                              @Param("categoryIds") List<Long> categoryIds);
-
 	@Query(value = "SELECT * FROM book ORDER BY RAND() LIMIT 7", nativeQuery = true)
 	List<Book> findRandomBooks();
 
 	List<Book> findByAuthor(Author author);
 
+
+	
 }

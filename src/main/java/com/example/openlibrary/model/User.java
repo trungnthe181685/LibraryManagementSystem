@@ -3,6 +3,7 @@ package com.example.openlibrary.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,8 +19,14 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
-	private String role;
-	private LocalDate createdDate;
+	private String phone;
+	
+	@Column(nullable = false)
+	private String role = "member";
+	private LocalDate dob = LocalDate.of(2000, 01, 01);
+	private String gender = "male";
+	private String avatar = "default.jpg";
+	private LocalDate createdDate = LocalDate.now();
 
 	
 	@OneToMany(mappedBy = "user")
@@ -71,5 +78,37 @@ public class User {
 
 	public void setCreatedDate(LocalDate createdDate) {
 		this.createdDate = createdDate;
+	}
+	
+	public String getAvatar() {
+		return avatar;
+	}
+	
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+	
+	public LocalDate getDob() {
+		return dob;
+	}
+	
+	public void setDoB(LocalDate dob) {
+		this.dob = dob;
+	}
+	
+	public String getGender() {
+		return gender;
+	}
+	
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+	
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 }

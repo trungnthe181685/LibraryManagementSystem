@@ -70,8 +70,6 @@ public class AdminCategoryController {
         } else {
             redirectAttributes.addFlashAttribute("message", "Category not found!");
         }
-
         return "redirect:/admin/categories";
     }
-
 }

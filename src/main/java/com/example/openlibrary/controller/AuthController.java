@@ -1,29 +1,24 @@
 package com.example.openlibrary.controller;
 
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.openlibrary.model.User;
-import com.example.openlibrary.repository.UserRepository;
 import com.example.openlibrary.service.UserService;
-
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class AuthController {
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private UserRepository userRepository;
-    
     @Autowired
     private UserService userService;
 
@@ -31,26 +26,7 @@ public class AuthController {
     public String login() {
         return "login";
     }
-
-    @PostMapping("/login")
-    public String loginHandler(@RequestParam String email,
-                               @RequestParam String password,
-                               Model model,
-                               HttpSession session) {
-        User user = userRepository.findByEmailAndPassword(email, password);
-        if (user != null) {
-            session.setAttribute("user", user);
-            if ("ADMIN".equalsIgnoreCase(user.getRole())) {
-                return "redirect:/admin/dashboard";
-            } else {
-                return "redirect:/home";
-            }
-        } else {
-            model.addAttribute("error", "Invalid credentials");
-            return "login";
-        }
-    }
-
+    
     @GetMapping("/signup")
     public String showSignupForm() {
         return "signup";
@@ -66,10 +42,10 @@ public class AuthController {
         	return "signup";
         }
         User newUser = new User();
+        newUser.setRole("member");
         newUser.setName(name);
         newUser.setEmail(email);
-        newUser.setPassword(password);
-        newUser.setCreatedDate(LocalDate.now());
+        newUser.setPassword(passwordEncoder.encode(password));
         userService.saveUser(newUser);
 
         return "redirect:/login";
