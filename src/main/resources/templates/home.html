@@ -60,7 +60,7 @@
 	    <th:block th:each="book : ${books}">
 	        <div class="product-card">
 				<a th:href="@{/books/{id}(id=${book.bookID})}">
-					<img height="300px" th:src="@{${book.imageURL}}" alt="Book Cover">
+					<img height="250px" th:src="@{${book.imageURL}}" alt="Book Cover">
 				</a>
 	            
 	            <h3 th:text="${book.bookName}">Book Title</h3>

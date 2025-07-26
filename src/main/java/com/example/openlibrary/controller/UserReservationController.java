@@ -75,7 +75,8 @@ public class UserReservationController {
 		bookRepository.save(book);
 
 		redirectAttrs.addFlashAttribute("message", "Book reserved successfully!");
-		return "redirect:/books";
+		return "redirect:/books/" + bookId;
+
 	}
 	
 	@GetMapping("/cancel-reservation/{id}")
