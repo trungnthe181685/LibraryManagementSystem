@@ -38,9 +38,30 @@ public class PublicBookController {
         if (book == null) {
             return "error"; // or redirect to 404 page
         }
+
         model.addAttribute("book", book);
-        return "bookdetail"; // Create a file called book-detail.html
+
+        // Fetch similar books
+        List<Book> similarBooks = bookService.findSimilarBooks(book);
+     // Limit to 4
+        if (similarBooks.size() > 4) {
+            similarBooks = similarBooks.subList(0, 4);
+        }
+        
+        
+        List<Book> sameAuthorBooks = bookService.findBooksBySameAuthor(book.getAuthor(), book.getBookID());
+
+        // Limit to 4
+        if (sameAuthorBooks.size() > 4) {
+            sameAuthorBooks = sameAuthorBooks.subList(0, 4);
+        }
+
+        model.addAttribute("sameAuthorBooks", sameAuthorBooks);
+        model.addAttribute("similarBooks", similarBooks);
+
+        return "bookdetail"; // Thymeleaf page
     }
+
     
     @GetMapping("/search")
     public String searchBooks(@RequestParam("query") String query, Model model) {

@@ -12,23 +12,94 @@
   <div th:replace="navbar :: navbar"></div>
 
   <main class="book-detail-container">
+	<!-- ✅ Toast message -->
+	  <div th:if="${message}" class="toast show position-fixed bottom-0 end-0 m-4" style="z-index: 1055;">
+	    <div class="toast-header bg-success text-white">
+	      <strong class="me-auto">Success</strong>
+	      <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+	    </div>
+	    <div class="toast-body" th:text="${message}"></div>
+	  </div>
+	
+	
     <div class="book-detail-card">
       <img th:src="${book.imageURL}" alt="Book Cover" class="book-detail-cover" />
       <div class="book-detail-info">
         <h1 class="book-title" th:text="${book.bookName}">Example Book Title</h1>
-        <h3 class="book-author" th:text="'by ' + ${book.author != null ? book.author.authorName : 'N/A'}">by Author Name</h3>
+        <a th:href="@{'/books?authorId=' + ${book.author != null ? book.author.authorID : ''} + ''}" class="book-author" th:text="${book.author != null ? book.author.authorName : 'N/A'}">by Author Name</a>
         <p class="book-price" th:text="'$' + ${book.rentalPrice}">$15.99</p>
         <p class="book-description" th:text="${book.description}">
           Book description goes here...
         </p>
+		<h3 class="book-publisher" th:text="${book.publisher != null ? 'Published by ' + book.publisher.name : 'N/A'}"> </h3>
+		<h3 class="book-published-date" th:text="${book.publishedDate != null ? ' Published Date ' + book.publishedDate : 'N/A'}"> </h3>
 		<div class="book-categories">
 		        <strong>Categories:</strong>
-		        <span th:each="cat : ${book.categories}" th:text="${cat.bookCatName} " class="category-label">Category</span>
+				<a th:each="category : ${book.categories}"
+						   th:href="@{'/books?categoryIds=' + ${category.bookCategoryID} + ''}"
+						   th:text="@{${category.bookCatName}}"
+						   class="category-label">
+						</a>
 		</div>
 		
-        <button class="buy-button">Borrow Now</button>
+		<form th:action="@{/user/reservations/borrow/{id}(id=${book.bookID})}" method="post">
+						<button type="submit" th:disabled="${book.availableCopies == 0}" class="buy-button">
+							<i class="bi bi-bookmark-check"></i> Borrow
+						</button>
+					</form>
       </div>
     </div>
+
+	<section class="products">
+	    <h2>Similar Books</h2>
+		<div class="product-grid">
+		    <th:block th:each="b : ${similarBooks}">
+		        <div class="product-card">
+					<a th:href="@{/books/{id}(id=${b.bookID})}">
+						<img height="250px" th:src="@{${b.imageURL}}" alt="Book Cover">
+					</a>
+		            
+		            <h3 th:text="${b.bookName}">Book Title</h3>
+		            <a th:href="@{/books/{id}(id=${b.bookID})}" class="readmore-btn">
+		                <!-- SVGs and text stay the same -->
+		                <span class="text">Read more</span>
+		            </a>
+		        </div>
+		    </th:block>
+		</div>
+
+	</section>
+	
+	<section class="products">
+	    <h2>More Books by the Same Author</h2>
+	    <div class="product-grid">
+	        <th:block th:each="b : ${sameAuthorBooks}">
+	            <div class="product-card">
+	                <a th:href="@{/books/{id}(id=${b.bookID})}">
+	                    <img height="250px" th:src="@{${b.imageURL}}" alt="Book Cover">
+	                </a>
+	                <h3 th:text="${b.bookName}">Book Title</h3>
+	                <a th:href="@{/books/{id}(id=${b.bookID})}" class="readmore-btn">
+	                    <span class="text">Read more</span>
+	                </a>
+	            </div>
+	        </th:block>
+	    </div>
+	</section>
+
+	
   </main>
+  
+  
+  <!-- Toast Notification -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+      <div id="liveToast" class="toast align-items-center text-bg-success border-0"
+           th:if="${message != null}" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body" th:text="${message}"></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+      </div>
+    </div>
 </body>
 </html>
