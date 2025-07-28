@@ -98,14 +98,25 @@ public class PublicBookController {
             @RequestParam(required = false) String sortBy,
             Model model) {
 
-        Sort sort = Sort.by("bookName");
-        if ("latest".equals(sortBy)) {
-            sort = Sort.by(Sort.Direction.DESC, "publishedDate");
-        } else if ("popularity".equals(sortBy)) {
-            sort = Sort.by(Sort.Direction.DESC, "reservations.size");
-        }
 
-        List<Book> books = bookRepository.searchBooks(bookName, authorId, categoryIds, sort);
+    	List<Book> books;
+
+    	if ("latest".equals(sortBy)) {
+    	    books = bookRepository.searchBooks(bookName, authorId, categoryIds,
+    	            Sort.by(Sort.Direction.DESC, "publishedDate"));
+
+    	} else if ("popularity".equals(sortBy)) {
+    	    books = bookRepository.searchBooksByPopularity(bookName, authorId, categoryIds);
+
+    	} else if ("".equals(sortBy)) {
+    	    books = bookRepository.searchBooks(bookName, authorId, categoryIds,
+    	            Sort.by("bookName"));
+
+    	} else {
+    	    books = bookRepository.searchBooks(bookName, authorId, categoryIds, Sort.unsorted());
+    	}
+
+
 
         model.addAttribute("books", books);
         model.addAttribute("authors", authorRepository.findAll());
