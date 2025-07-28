@@ -98,6 +98,7 @@ public class PublicBookController {
             @RequestParam(required = false) String sortBy,
             Model model) {
 
+
     	List<Book> books;
 
     	if ("latest".equals(sortBy)) {
@@ -114,6 +115,7 @@ public class PublicBookController {
     	} else {
     	    books = bookRepository.searchBooks(bookName, authorId, categoryIds, Sort.unsorted());
     	}
+
 
 
         model.addAttribute("books", books);
