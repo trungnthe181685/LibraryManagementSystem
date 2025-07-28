@@ -1,6 +1,7 @@
 package com.example.openlibrary.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -25,6 +26,8 @@ public class Reservation {
     private Long reservationID;
 
     private LocalDate createdDate;
+
+    private LocalDateTime reservedAt; // ✅ Add this field
 
     @Enumerated(EnumType.STRING)
     private Status status = Status.RESERVED;
@@ -54,6 +57,14 @@ public class Reservation {
 
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getReservedAt() {
+        return reservedAt;
+    }
+
+    public void setReservedAt(LocalDateTime reservedAt) {
+        this.reservedAt = reservedAt;
     }
 
     public Status getStatus() {

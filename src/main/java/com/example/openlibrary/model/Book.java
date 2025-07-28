@@ -31,6 +31,7 @@ public class Book {
 	private int availableCopies;
 	private double rentalPrice;
 	private String imageURL;
+	private int borrow_count;
 
 	@ManyToOne
 	@JoinColumn(name = "authorID")
@@ -49,6 +50,14 @@ public class Book {
 
 	public Long getBookID() {
 		return bookID;
+	}
+
+	public int getBorrow_count() {
+		return borrow_count;
+	}
+
+	public void setBorrow_count(int borrow_count) {
+		this.borrow_count = borrow_count;
 	}
 
 	public void setBookID(Long bookID) {
