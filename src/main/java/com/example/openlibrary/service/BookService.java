@@ -16,46 +16,43 @@ import java.util.stream.Collectors;
 @Service
 public class BookService {
 
-    @Autowired
-    private BookRepository bookRepository;
+	@Autowired
+	private BookRepository bookRepository;
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
-    }
+	public List<Book> getAllBooks() {
+		return bookRepository.findAll();
+	}
 
-    public Book getBookById(Long id) {
-        return bookRepository.findById(id).orElse(null);
-    }
-    
-    public List<Book> searchByKeyword(String keyword) {
-        return bookRepository.findByBookNameContainingIgnoreCase(keyword);
-    }
-    
-    public List<Book> getFilteredBooks(Long authorId, Integer year, List<Long> categoryIds) {
-        return bookRepository.findBooksByFilters(authorId, year, categoryIds);
-    }
+	public Book getBookById(Long id) {
+		return bookRepository.findById(id).orElse(null);
+	}
 
-    public List<Book> findSimilarBooks(Book book) {
-        List<BookCategory> categories = book.getCategories();
-        if (categories == null || categories.isEmpty()) {
-            return new ArrayList<>();
-        }
+	public List<Book> searchByKeyword(String keyword) {
+		return bookRepository.findByBookNameContainingIgnoreCase(keyword);
+	}
 
-        // Get all category IDs of this book
-        List<Long> categoryIds = categories.stream()
-                .map(BookCategory::getBookCategoryID)
-                .collect(Collectors.toList());
+	public List<Book> getFilteredBooks(Long authorId, Integer year, List<Long> categoryIds) {
+		return bookRepository.findBooksByFilters(authorId, year, categoryIds);
+	}
 
-        // Find books that share at least one of these categories (exclude the original book)
-        return bookRepository.findDistinctByCategories_BookCategoryIDInAndBookIDNot(categoryIds, book.getBookID());
-    }
-    
-    public List<Book> findBooksBySameAuthor(Author author, Long excludeBookId) {
-        if (author == null) return Collections.emptyList();
-        return bookRepository.findByAuthorAndBookIDNot(author, excludeBookId);
-    }
+	public List<Book> findSimilarBooks(Book book) {
+		List<BookCategory> categories = book.getCategories();
+		if (categories == null || categories.isEmpty()) {
+			return new ArrayList<>();
+		}
 
-	
+		// Get all category IDs of this book
+		List<Long> categoryIds = categories.stream().map(BookCategory::getBookCategoryID).collect(Collectors.toList());
 
+		// Find books that share at least one of these categories (exclude the original
+		// book)
+		return bookRepository.findDistinctByCategories_BookCategoryIDInAndBookIDNot(categoryIds, book.getBookID());
+	}
+
+	public List<Book> findBooksBySameAuthor(Author author, Long excludeBookId) {
+		if (author == null)
+			return Collections.emptyList();
+		return bookRepository.findByAuthorAndBookIDNot(author, excludeBookId);
+	}
 
 }

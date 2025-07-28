@@ -18,4 +18,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
 	List<Reservation> findByUser(User user);
 
+	boolean existsByBookAndUser(Book book, User user);
+
+	List<Reservation> findByBookOrderByReservedAtAsc(Book book);
 }

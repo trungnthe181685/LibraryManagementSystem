@@ -24,10 +24,13 @@ public class HomeController {
     @GetMapping("/home")
     public String homePage(Model model) {
         List<BookCategory> randomCategories = categoryRepo.findRandomCategories();
-        List<Book> randomBooks = bookRepo.findRandomBooks();
+
+        List<Book> randomBooks = bookRepo.findRandomBooks(); // For Random Section
+        List<Book> popularBooks = bookRepo.findPopularBooks(); // You should implement this method
 
         model.addAttribute("categories", randomCategories);
-        model.addAttribute("books", randomBooks);
+        model.addAttribute("randomBooks", randomBooks);
+        model.addAttribute("popularBooks", popularBooks);
 
         return "home"; // home.html
     }
