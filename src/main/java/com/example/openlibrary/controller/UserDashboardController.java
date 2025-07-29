@@ -82,20 +82,38 @@ public class UserDashboardController {
 
 
 	@PostMapping("/profile/update")
-	public String updateProfile(@ModelAttribute("user") User updatedUser, HttpSession session,
+	public String updateProfile(@ModelAttribute("user") User updatedUser, @AuthenticationPrincipal Object principal,
 	                            RedirectAttributes redirectAttrs) {
-	    User sessionUser = (User) session.getAttribute("user");
-	    if (sessionUser == null)
+		if (principal == null)
+	        return "redirect:/login";
+
+	    User user = null;
+
+	    if (principal instanceof org.springframework.security.oauth2.core.user.DefaultOAuth2User oauthUser) {
+	        // Get user by email (OAuth2)
+	        String email = oauthUser.getAttribute("email");
+	        user = userRepository.findByEmail(email); // replace with your actual method
+	    } else if (principal instanceof org.springframework.security.core.userdetails.User springUser) {
+	        // Get user by email (form login)
+	        String email = springUser.getUsername();
+	        user = userRepository.findByEmail(email); // same here
+	    }
+
+	    if (user == null)
 	        return "redirect:/login";
 
 	    // Update fields
-	    sessionUser.setName(updatedUser.getName());
-	    sessionUser.setEmail(updatedUser.getEmail());
+	    user.setName(updatedUser.getName());
+	    user.setEmail(updatedUser.getEmail());
+	    user.setPhone(updatedUser.getPhone());
+	    user.setGender(updatedUser.getGender());
+	    user.setDob(updatedUser.getDob());
+	    user.setAvatar(updatedUser.getAvatar());
 	    if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-	        sessionUser.setPassword(updatedUser.getPassword());
+	        user.setPassword(updatedUser.getPassword());
 	    }
 
-	    userService.saveUser(sessionUser);
+	    userService.saveUser(user);
 
 	    redirectAttrs.addFlashAttribute("message", "Profile updated successfully!");
 	    return "redirect:/profile";

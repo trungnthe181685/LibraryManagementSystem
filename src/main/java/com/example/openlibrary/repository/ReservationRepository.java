@@ -21,4 +21,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 	boolean existsByBookAndUser(Book book, User user);
 
 	List<Reservation> findByBookOrderByReservedAtAsc(Book book);
+	
+	@Query("SELECT r FROM Reservation r LEFT JOIN FETCH r.borrowRecords WHERE r.reservationID = :id")
+	Reservation findByIdWithBorrowRecords(@Param("id") Long id);
+
 }
