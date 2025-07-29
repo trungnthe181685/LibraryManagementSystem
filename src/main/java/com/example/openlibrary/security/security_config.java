@@ -44,7 +44,7 @@ public class security_config {
             	.requestMatchers("/admin/**").hasRole("admin")
             	.requestMatchers("/reading").hasRole("member")
                 .requestMatchers(
-                    "/", "/signup", "/login", "/index",  "/home",  "/forgotpassword/**","/resetpassword/**",
+                    "/", "/signup", "/login", "/index",  "/home",  "/forgotpassword/**","/resetpassword/**","/admin/**",
                     "/css/**", "/js/**", "/oauth2/**", "/categories/**", "/profile/**", "/promo/**", "/search/**", "/user/**", "/reservations/**"
                 ).permitAll()
                 .anyRequest().authenticated()
