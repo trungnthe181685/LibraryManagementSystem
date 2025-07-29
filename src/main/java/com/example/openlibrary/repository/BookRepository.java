@@ -15,26 +15,29 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 	List<Book> findByBookNameContainingIgnoreCase(String bookName);
 
 	
-	@Query("SELECT DISTINCT b FROM Book b " +
-		       "JOIN b.categories c " +
-		       "LEFT JOIN b.author a " +
-		       "WHERE (:authorId IS NULL OR a.authorID = :authorId) " +
-		       "AND (:year IS NULL OR FUNCTION('YEAR', b.publishedDate) = :year) " +
-		       "AND (:categoryIds IS NULL OR c.bookCategoryID IN :categoryIds)")
-		List<Book> findBooksByFilters(@Param("authorId") Long authorId,
-		                              @Param("year") Integer year,
-		                              @Param("categoryIds") List<Long> categoryIds);
-	
-	@Query("SELECT DISTINCT b FROM Book b " +
-			"JOIN b.categories c " +
-			"LEFT JOIN b.author a " +
-			"WHERE (:title IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :title, '%'))) " +
-			"AND (:authorId IS NULL OR a.authorID = :authorId) " +
-			"AND (:categoryIds IS NULL OR c.bookCategoryID IN :categoryIds)")
-	List<Book> searchBooks(
-			@Param("title") String title,
-			@Param("authorId") Long authorId,
-			@Param("categoryIds") List<Long> categoryIds, Sort sort);
+	@Query("""
+		    SELECT b FROM Book b
+		    LEFT JOIN b.categories c
+		    LEFT JOIN b.author a
+		    LEFT JOIN b.reservations r
+		    WHERE (:title IS NULL OR LOWER(b.bookName) LIKE LOWER(CONCAT('%', :title, '%')))
+		      AND (:authorId IS NULL OR a.authorID = :authorId)
+		      AND (:categoryIds IS NULL OR 
+		          (SELECT COUNT(DISTINCT bc.bookCategoryID) FROM b.categories bc WHERE bc.bookCategoryID IN :categoryIds) = :catSize)
+		    GROUP BY b
+		    ORDER BY 
+		        CASE WHEN :sortBy = 'latest' THEN b.publishedDate END DESC,
+		        CASE WHEN :sortBy = 'oldest' THEN b.publishedDate END ASC,
+		        CASE WHEN :sortBy = 'popularity' THEN COUNT(r) END DESC
+		""")
+		List<Book> searchBooksAllFilters(
+		    @Param("title") String title,
+		    @Param("authorId") Long authorId,
+		    @Param("categoryIds") List<Long> categoryIds,
+		    @Param("catSize") Long catSize,
+		    @Param("sortBy") String sortBy
+		);
+
 
 	@Query(value = "SELECT * FROM book ORDER BY RAND() LIMIT 6", nativeQuery = true)
 	List<Book> findRandomBooks();
