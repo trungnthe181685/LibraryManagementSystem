@@ -64,7 +64,7 @@
         <th:block th:each="book : ${randomBooks}">
             <div class="product-card">
                 <a th:href="@{/books/{id}(id=${book.bookID})}">
-                    <img height="250px" th:src="@{${book.imageURL}}" alt="Book Cover">
+                    <img height="250px" width="165px" th:src="@{${book.imageURL}}" alt="Book Cover">
                 </a>
                 <h3 th:text="${book.bookName}">Book Title</h3>
                 <a th:href="@{/books/{id}(id=${book.bookID})}" class="readmore-btn">
