@@ -20,6 +20,16 @@ public class User {
 	private String email;
 	private String password;
 	private String phone;
+    private String resetToken;
+
+    // ✅ Getter and setter for resetToken
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
+    }
 	
 	@Column(nullable = false)
 	private String role = "member";
