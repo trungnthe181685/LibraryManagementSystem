@@ -115,5 +115,30 @@ public class AdminReservationController {
         return "redirect:/admin/reservations";
     }
 
+    
+    @GetMapping("/deleteReservation/{id}")
+    public String deleteReservation(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Reservation reservation = reservationRepo.findByIdWithBorrowRecords(id);
+        if (reservation != null) {
+            reservationRepo.delete(reservation); // Ensure full entity with borrowRecords is loaded
+            redirectAttributes.addFlashAttribute("message", "Reservation and associated borrow records deleted successfully.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Reservation not found.");
+        }
+        return "redirect:/admin/reservations";
+    }
+
+    @GetMapping("/deleteBorrowRecord/{id}")
+    public String deleteBorrowRecord(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        if (borrowRecordRepo.existsById(id)) {
+            borrowRecordRepo.deleteById(id);
+            redirectAttributes.addFlashAttribute("message", "Borrow record deleted successfully.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Borrow record not found.");
+        }
+        return "redirect:/admin/reservations";
+    }
+
+
 }
 
