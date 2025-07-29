@@ -135,23 +135,54 @@ body {
 	justify-content: center;
 }
 
-.promo-banner {
-    background: #dc3545;
-    color: #fff;
-    text-align: center;
-    padding: 40px 20px;
-}
 /* Promo Slider */
 .promo-slider {
     display: flex;
     overflow-x: auto;
-    gap: 20px;
     padding: 40px 20px;
+	gap: 20px;
 }
 
 .promo-slider .slide img {
-    width: 100%;
+    width: 150%;
+	height: 100%;
+	object-fit: cover;
     border-radius: 5px;
+}
+
+/* --- CSS Slider --- */
+.promo-slider {
+  overflow: hidden;
+  position: relative;
+}
+
+.slider-wrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.slider {
+  display: flex;
+  width: 50%;
+  animation: slide 24s infinite;
+}
+
+.slider .slide {
+  width: 75%;
+  flex-shrink: 0;
+}
+
+.slider .slide img {
+  width: 100%;
+  display: block;
+  border-radius: 4px;
+}
+
+@keyframes slide {
+  0% { transform: translateX(0); }
+  33% { transform: translateX(-100%); }
+  66% { transform: translateX(-200%); }
+  100% { transform: translateX(0); }
 }
 
 /* Newsletter */
@@ -187,40 +218,6 @@ body {
     color: #fff;
     text-align: center;
     padding: 20px;
-}
-/* --- CSS Slider --- */
-.promo-slider {
-  overflow: hidden;
-  position: relative;
-}
-
-.slider-wrapper {
-  width: 100%;
-  overflow: hidden;
-}
-
-.slider {
-  display: flex;
-  width: 50%;
-  animation: slide 24s infinite;
-}
-
-.slider .slide {
-  width: 100%;
-  flex-shrink: 0;
-}
-
-.slider .slide img {
-  width: 100%;
-  display: block;
-  border-radius: 4px;
-}
-
-@keyframes slide {
-  0% { transform: translateX(0); }
-  33% { transform: translateX(-100%); }
-  66% { transform: translateX(-200%); }
-  100% { transform: translateX(0); }
 }
 
 .product-card {
@@ -355,6 +352,7 @@ body {
   padding: 15px 15px;
   gap: 0px;
   transition: all 0.4s;
+  text-decoration: none;
 }
 .book-wrapper {
   display: flex;
@@ -374,7 +372,7 @@ body {
   transform-origin: left;
 }
 .readmore-btn:hover {
-  background-color: rgb(64, 0, 0);
+  background-color: rgb(100, 15, 15);
 }
 @keyframes paging {
   0% {
@@ -518,12 +516,20 @@ body {
   cursor: pointer;
 }
 
+.profile-block {
+  max-width: 160px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .profile-menu {
   display: none;
   position: absolute;
   background-color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  z-index: 100;
+  top:110%; 
+  z-index: 10;
   right: 0;
   padding: 0.5rem 0;
   border-radius: 0.25rem;
@@ -543,6 +549,19 @@ body {
 
 .profile-menu a:hover {
   background-color: #f0f0f0;
+  color: paleturquoise;
+}
+
+.arrow-up {
+  position: absolute;
+  top: -5px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid white;
+
 }
 
 .avatar {

@@ -19,18 +19,21 @@
               <a href="/cart" class="nav-link"><i class="bi bi-cart"></i></a>
 
               <!-- User avatar + name -->
-			  <div class="profile d-flex align-items-center">
-			  	<img th:if="${user != null}" 
-			  	     th:src="@{/images/{avatar}(avatar=${user.avatar})}"
-			  	     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; vertical-align: middle;" 
-			  	     alt="Avatar"/>
-			    <span th:text="${user.name}" class="ms-3"></span>
+			  <div class="profile d-flex align-items-center" onmouseenter="showMenu()" onmouseleave="hideMenu()">
+				<div class="profile-block d-flex align-items-center">
+				  	<img th:if="${user != null}" 
+				  	     th:src="@{/images/{avatar}(avatar=${user.avatar})}"
+				  	     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; vertical-align: middle;" 
+				  	     alt="Avatar"/>
+				    <span th:text="${user.name}" class="ms-3"></span>
+				</div>
 
                 <!-- Dropdown Menu -->
                 <div class="profile-menu text-start">
-                  <a th:href="@{/profile}">My Profile</a>
-                  <a th:href="@{/reading}">Reading</a>
-                  <a th:href="@{/logout}">Log Out</a>
+					<div class="arrow-up"></div>
+	                  <a th:href="@{/profile}">My Profile</a>
+	                  <a th:href="@{/cart}">Reading</a>
+	                  <a th:href="@{/logout}">Log Out</a>
                 </div>
               </div>
             </div>
@@ -38,5 +41,20 @@
         </div>
       </nav>
     </div>
+	<script>
+	  let menu = document.querySelector('.profile-menu');
+	  let timeout;
+
+	  function showMenu() {
+	    clearTimeout(timeout);
+	    menu.style.display = 'block';
+	  }
+
+	  function hideMenu() {
+	    timeout = setTimeout(() => {
+	      menu.style.display = 'none';
+	    }, 200); // delay prevents flicker
+	  }
+	</script>
   </th:block>
 </html>

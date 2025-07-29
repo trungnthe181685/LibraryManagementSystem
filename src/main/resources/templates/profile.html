@@ -40,10 +40,6 @@
 			    <div class="col-md-3 sidebar">
 			      <div class="mb-4 d-flex align-items-center">
 			        <img th:src="@{/images/{avatar}(avatar=${user.avatar})}" class="avatar me-2" alt="avatar">
-			        <div>
-			          <div th:text="${user.name}"></div>
-			          <a href="#" class="text-decoration-none">Change profile</a>
-			        </div>
 			      </div>
 				  <ul class="nav flex-column">
 				      <li><a class="nav-link [[${tab}=='info' ? 'active' : '']]" href="/profile?tab=info">Profile</a></li>
