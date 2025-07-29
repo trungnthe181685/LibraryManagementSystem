@@ -34,4 +34,9 @@ public class HomeController {
 
         return "home"; // home.html
     }
+    
+    @GetMapping("/help")
+    public String helpPage() {
+        return "help";
+    }
 }
