@@ -42,10 +42,10 @@
 						</a>
 		</div>
 		
-		<form th:action="@{/user/reservations/borrow/{id}(id=${book.bookID})}" method="post">
-						<button type="submit" th:disabled="${book.availableCopies == 0}" class="buy-button">
-							<i class="bi bi-bookmark-check"></i> Borrow
-						</button>
+		<form th:if="${book.availableCopies > 0}" th:action="@{/user/reservations/borrow/{id}(id=${book.bookID})}" method="post">
+			<button class="btn btn-outline-primary btn-sm" type="submit">
+											<i class="bi bi-book"></i> Borrow Book
+										</button>
 					</form>
       </div>
     </div>

@@ -36,10 +36,10 @@
 					<div class="col-md-3">
 						<label for="sortBy" class="form-label">Sort By</label>
 						<select class="form-select" name="sortBy" id="sortBy">
-							<option value="">Default</option>
-							<option value="latest" th:selected="${selectedSort == 'latest'}">Latest</option>
-							<option value="popularity" th:selected="${selectedSort == 'popularity'}">Most Popular
-							</option>
+						    <option value="">Default</option>
+						    <option value="latest" th:selected="${selectedSort == 'latest'}">Latest</option>
+						    <option value="oldest" th:selected="${selectedSort == 'oldest'}">Oldest</option>
+						    <option value="popularity" th:selected="${selectedSort == 'popularity'}">Most Popular</option>
 						</select>
 					</div>
 
@@ -94,7 +94,7 @@
 						</form>
 
 						<form th:if="${book.availableCopies > 0}"
-							th:action="@{/books/{bookId}/borrow(bookId=${book.bookID})}" method="post">
+							th:action="@{/user/reservations/borrow/{id}(id=${book.bookID})}" method="post">
 							<input type="hidden" name="userId" value="1" />
 							<!-- TODO: Replace with authenticated user ID -->
 							<button class="btn btn-outline-primary btn-sm" type="submit">

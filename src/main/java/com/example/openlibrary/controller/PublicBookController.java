@@ -92,42 +92,41 @@ public class PublicBookController {
 
     @GetMapping("/books")
     public String getBooks(
-            @RequestParam(required = false) String bookName,
+            @RequestParam(required = false) String title,
             @RequestParam(required = false) Long authorId,
             @RequestParam(required = false) List<Long> categoryIds,
             @RequestParam(required = false) String sortBy,
             Model model) {
 
+        Sort sort = Sort.unsorted();
 
-    	List<Book> books;
+        if ("latest".equals(sortBy)) {
+            sort = Sort.by(Sort.Direction.DESC, "publishedDate");
+        } else if ("oldest".equals(sortBy)) {
+            sort = Sort.by(Sort.Direction.ASC, "publishedDate");
+        } else if ("popularity".equals(sortBy)) {
+            sort = Sort.by(Sort.Direction.DESC, "reservations.size"); // May vary based on entity structure
+        }
 
-    	if ("latest".equals(sortBy)) {
-    	    books = bookRepository.searchBooks(bookName, authorId, categoryIds,
-    	            Sort.by(Sort.Direction.DESC, "publishedDate"));
+        Long catSize = (categoryIds != null) ? (long) categoryIds.size() : null;
 
-    	} else if ("popularity".equals(sortBy)) {
-    	    books = bookRepository.searchBooksByPopularity(bookName, authorId, categoryIds);
-
-    	} else if ("".equals(sortBy)) {
-    	    books = bookRepository.searchBooks(bookName, authorId, categoryIds,
-    	            Sort.by("bookName"));
-
-    	} else {
-    	    books = bookRepository.searchBooks(bookName, authorId, categoryIds, Sort.unsorted());
-    	}
-
-
+        List<Book> books = bookRepository.searchBooksAllFilters(
+        		title, authorId, categoryIds, catSize, sortBy);
 
         model.addAttribute("books", books);
         model.addAttribute("authors", authorRepository.findAll());
         model.addAttribute("categories", bookCategoryRepository.findAll());
-        model.addAttribute("selectedbookName", bookName);
+        model.addAttribute("selectedbookName", title);
         model.addAttribute("selectedAuthorId", authorId);
         model.addAttribute("selectedCategoryIds", categoryIds);
         model.addAttribute("selectedSort", sortBy);
 
         return "book-list";
     }
+
+
+
+
 
     @PostMapping("/books/{bookId}/reserve")
     public String reserveBook(@PathVariable Long bookId, @RequestParam Long userId) {

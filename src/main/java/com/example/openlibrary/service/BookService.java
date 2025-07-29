@@ -30,11 +30,7 @@ public class BookService {
 	public List<Book> searchByKeyword(String keyword) {
 		return bookRepository.findByBookNameContainingIgnoreCase(keyword);
 	}
-
-	public List<Book> getFilteredBooks(Long authorId, Integer year, List<Long> categoryIds) {
-		return bookRepository.findBooksByFilters(authorId, year, categoryIds);
-	}
-
+	
 	public List<Book> findSimilarBooks(Book book) {
 		List<BookCategory> categories = book.getCategories();
 		if (categories == null || categories.isEmpty()) {
