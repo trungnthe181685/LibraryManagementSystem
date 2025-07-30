@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.openlibrary.model.BorrowRecord;
+import com.example.openlibrary.model.Notification;
 import com.example.openlibrary.model.Reservation;
 import com.example.openlibrary.model.User;
 import com.example.openlibrary.repository.BorrowRecordRepository;
+import com.example.openlibrary.repository.NotificationRepository;
 import com.example.openlibrary.repository.ReservationRepository;
 import com.example.openlibrary.repository.UserRepository;
 import com.example.openlibrary.service.UserService;
@@ -35,6 +37,9 @@ public class UserDashboardController {
 	
 	@Autowired
 	private BorrowRecordRepository borrowRecordRepo;
+	
+	@Autowired
+	private NotificationRepository notificationRepository;
 	
 	
 	@GetMapping("/cart")
@@ -74,7 +79,17 @@ public class UserDashboardController {
 	        }
 	        model.addAttribute("reservations", reservations);
 	        model.addAttribute("recordsMap", recordsMap);
+	    } else if ("notifications".equals(tab)) {
+	        List<Notification> notifications = notificationRepository.findByUserOrderByCreatedAtDesc(user);
+	        notifications.forEach(n -> {
+	            if (!n.isRead()) {
+	                n.setRead(true);
+	                notificationRepository.save(n);
+	            }
+	        });
+	        model.addAttribute("notifications", notifications);
 	    }
+
 
 	    return "profile";
 	}

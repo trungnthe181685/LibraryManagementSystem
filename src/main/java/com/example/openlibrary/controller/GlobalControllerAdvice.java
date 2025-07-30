@@ -1,6 +1,7 @@
 package com.example.openlibrary.controller;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,9 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.example.openlibrary.model.Notification;
 import com.example.openlibrary.model.User;
+import com.example.openlibrary.repository.NotificationRepository;
 import com.example.openlibrary.service.UserService;
 
 
@@ -18,6 +21,9 @@ public class GlobalControllerAdvice {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private NotificationRepository notificationRepo;
 
     @ModelAttribute("user")
     public User getCurrentUser(Principal principal) {
@@ -41,4 +47,12 @@ public class GlobalControllerAdvice {
         System.out.println("Loaded user: " + user);
         return user;
     }
+    
+    @ModelAttribute("notifications")
+    public List<Notification> getNotifications(@ModelAttribute("user") User user) {
+        if (user == null) return List.of();
+        return notificationRepo.findTop5ByUserOrderByCreatedAtDesc(user);
+    }
+
+
 }

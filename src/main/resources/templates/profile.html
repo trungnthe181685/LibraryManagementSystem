@@ -44,6 +44,7 @@
 				  <ul class="nav flex-column">
 				      <li><a class="nav-link [[${tab}=='info' ? 'active' : '']]" href="/profile?tab=info">Profile</a></li>
 				      <li><a class="nav-link [[${tab}=='reservations' ? 'active' : '']]" href="/profile?tab=reservations">Reservations</a></li>
+					  <li><a class="nav-link [[${tab}=='notifications' ? 'active' : '']]" href="/profile?tab=notifications">Notifications</a></li>
 				  </ul>
 
 
@@ -161,7 +162,32 @@
 				  </table>
 				</div>
 
-				
+				<!-- Notifications Tab -->
+				<div class="col-md-9" th:if="${tab} == 'notifications'">
+				  <h4>My Notifications</h4>
+				  <p>Here are your recent system notifications:</p>
+
+				  <table class="table table-striped">
+				    <thead>
+				      <tr>
+				        <th>Message</th>
+				        <th>Date</th>
+				        <th>Status</th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				      <tr th:each="n : ${notifications}">
+				        <td th:text="${n.message}"></td>
+				        <td th:text="${#temporals.format(n.createdAt, 'dd MMM yyyy HH:mm')}"></td>
+				        <td>
+				          <span th:text="${n.read ? 'Read' : 'Unread'}"
+				                th:classappend="${n.read ? 'text-success' : 'text-danger'}"></span>
+				        </td>
+				      </tr>
+				    </tbody>
+				  </table>
+				</div>
+
 				
 			  </div>
 			</div>

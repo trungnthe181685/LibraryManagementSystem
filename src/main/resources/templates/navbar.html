@@ -13,7 +13,27 @@
 
             <div class="nav-links">
               <a href="/help" class="nav-link"><i class="bi bi-question-circle"></i></a>
-              <a href="/noti" class="nav-link"><i class="bi bi-bell"></i></a>
+			  <li class="nav-item dropdown">
+			      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+			          <i class="bi bi-bell"></i>
+			          <span th:if="${notifications.size() > 0}" class="badge bg-danger">
+			              <span th:text="${notifications.size()}">0</span>
+			          </span>
+			      </a>
+			      <ul class="dropdown-menu dropdown-menu-end">
+			          <li th:each="noti : ${notifications}">
+			              <a class="dropdown-item">
+			                  <span th:text="${noti.message}">Notification message</span>
+			                  <br/>
+			                  <small th:text="${#temporals.format(noti.createdAt, 'dd-MM-yyyy HH:mm')}"></small>
+			              </a>
+			          </li>
+			          <li th:if="${notifications.isEmpty()}">
+			              <span class="dropdown-item text-muted">No notifications</span>
+			          </li>
+			      </ul>
+			  </li>
+
               <a href="/categories" class="nav-link">Categories</a>
 			  <a href="/books" class="nav-link">Books</a>
               <a href="/cart" class="nav-link"><i class="bi bi-cart"></i></a>
