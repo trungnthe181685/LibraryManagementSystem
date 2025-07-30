@@ -1,5 +1,5 @@
 body {
-  background: lightgray;
+  background: white;
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
   color: #333;
@@ -10,7 +10,7 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-    background: dimgrey;
+    background: black;
     color: #fff;
     padding: 20px 40px;
 }
@@ -20,14 +20,23 @@ body {
 }
 
 .logo {
+	display: inline-flex;
     color: #fff;
     font-size: 54px;
     text-decoration: none;
     font-weight: bold;
-	align-items: left;
+	align-items: center;
 	justify-content: center;
 	margin-left: 70px;
 	margin-right: 50px;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.logo i {
+	margin: 0 4px;
+	font-size: inherit;
+	display: inline-block;
 }
 
 .nav-right {
@@ -100,12 +109,17 @@ body {
 }
 
 .nav-link:hover {
-  text-decoration: underline;
+	text-shadow: 
+	  0.2px 0.2px 0 dodgerblue, 
+	 -0.2px 0.2px 0 dodgerblue, 
+	  0.2px -0.2px 0 dodgerblue, 
+	 -0.2px -0.2px 0 dodgerblue;
 }
 
 .categories {
+	color: black;
     padding: 40px 20px;
-    background: #f9f9f9;
+    background: white;
 }
 
 .category-list {
@@ -126,6 +140,8 @@ body {
 
 .products {
     padding: 40px 20px;
+	background-color: white;
+	color: black;
 }
 
 .product-grid {
@@ -133,11 +149,13 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
 	justify-content: center;
+	color: black;
 }
 
 /* Promo Slider */
 .promo-slider {
     display: flex;
+	background-color: white;
     overflow-x: auto;
     padding: 40px 20px;
 	gap: 20px;
@@ -221,16 +239,28 @@ body {
 }
 
 .product-card {
+	background-color: white;
 	border: 1px solid #ddd;
-	    border-radius: 4px;
-	    padding: 20px;
-	    text-align: center;
-	    background: #fff;
-	    display: flex; /* Added: Use Flexbox for layout */
-	    flex-direction: column; /* Stack elements vertically */
-	    justify-content: space-between; /* Ensure button stays at bottom */
-	    height: 500px; /* Added: Fixed height for uniformity */
-	    overflow: hidden; /* Added: Prevent overflow */
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    display: flex; /* Added: Use Flexbox for layout */
+    flex-direction: column; /* Stack elements vertically */
+    justify-content: space-between; /* Ensure button stays at bottom */
+    height: 500px; /* Added: Fixed height for uniformity */
+    overflow: hidden;
+	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+	transition: box-shadow 0.3s ease;
+	}
+	
+.product-card:hover {
+	box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+	}
+
+.product-card img {
+	display: block;
+	width: 190px;
+	height: 270px;
 }
 
 .button {
@@ -257,7 +287,7 @@ body {
   border-radius: inherit;
   scale: 0;
   z-index: -1;
-  background-color: rgb(64, 0, 0);
+  background-color: dodgerblue;
   transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
@@ -268,7 +298,7 @@ body {
 .button:hover {
   color: rgb(255, 255, 255);
   scale: 1.1;
-  box-shadow: 0 0px 20px rgb(64, 0, 0);
+  box-shadow: 0 0px 20px dodgerblue;
 }
 
 .button:active {
@@ -309,11 +339,11 @@ body {
 }
 
 .button1:hover {
-  background-color: rgb(64, 0, 0);
+  background-color: dodgerblue;
 }
 
 .button1:hover .button__icon-wrapper {
-  color: rgb(64, 0, 0);
+  color: dodgerblue;
 }
 
 .button__icon-svg--copy {
@@ -346,7 +376,7 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-color: rgb(64, 0, 0);
+  background-color: dodgerblue;
   border: none;
   border-radius: 10px;
   padding: 15px 15px;
@@ -372,7 +402,8 @@ body {
   transform-origin: left;
 }
 .readmore-btn:hover {
-  background-color: rgb(100, 15, 15);
+  background-color:royalblue;
+  box-shadow: 0 0px 20px dodgerblue;
 }
 @keyframes paging {
   0% {
@@ -429,6 +460,7 @@ body {
   text-decoration: none;
   font-weight: bold;
   transition: background 0.3s;
+  border: solid black;
 }
 
 .category-btn:hover {
@@ -504,6 +536,7 @@ body {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-top: 20px;
 }
 
 .buy-button:hover {
@@ -568,3 +601,4 @@ body {
   object-fit: cover;
   border-radius: 50%;
 }
+
