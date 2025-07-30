@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,20 +39,27 @@ public class AdminReservationController {
     private BookRepository bookRepo;
 
     @GetMapping
-    public String listReservations(Model model) {
-        List<Reservation> reservations = reservationRepo.findAll();
+    public String listReservations(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            Model model) {
+        
+        Page<Reservation> reservationPage = reservationRepo.findAll(PageRequest.of(page, size));
 
-        // Create a map to hold borrow records for each reservation
         Map<Long, List<BorrowRecord>> recordsMap = new HashMap<>();
-        for (Reservation reservation : reservations) {
+        for (Reservation reservation : reservationPage.getContent()) {
             List<BorrowRecord> records = borrowRecordRepo.findByReservation(reservation);
             recordsMap.put(reservation.getReservationID(), records);
         }
 
-        model.addAttribute("reservations", reservations);
+        model.addAttribute("reservations", reservationPage.getContent());
         model.addAttribute("recordsMap", recordsMap);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", reservationPage.getTotalPages());
+
         return "admin/reservations";
     }
+
 
 
     @GetMapping("/update-status/{id}")
