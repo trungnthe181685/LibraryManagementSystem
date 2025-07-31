@@ -2,6 +2,7 @@ package com.example.openlibrary.model;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -19,6 +20,9 @@ public class BorrowRecord {
     @ManyToOne
     @JoinColumn(name = "reservationID")
     private Reservation reservation;
+    
+    @OneToMany(mappedBy = "borrowRecord", cascade = CascadeType.ALL, orphanRemoval = true) // Change to "borrowRecord"
+    private List<Notification> notifications;
 
     // ========== Fine Calculation ==========
 
