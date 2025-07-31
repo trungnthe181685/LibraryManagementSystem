@@ -55,6 +55,9 @@ public class security_config {
                 .successHandler(loginsuccessHandler)
                 .permitAll()
             )
+            .csrf(csrf -> csrf
+            	    .ignoringRequestMatchers("/admin/publishers/delete-publisher/**")
+            	)
             .oauth2Login(oauth2 -> oauth2
                 .loginPage("/index")
                 .defaultSuccessUrl("/home", true)
