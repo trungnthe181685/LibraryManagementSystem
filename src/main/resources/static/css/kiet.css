@@ -602,3 +602,17 @@ body {
   border-radius: 50%;
 }
 
+.book-categories {
+    display: flex;
+    gap: 20px;
+}
+
+a.category-label {
+    text-decoration: none;
+    color: dimgrey;
+}
+
+a.category-label:hover{
+    color: lightgrey;
+}
+
