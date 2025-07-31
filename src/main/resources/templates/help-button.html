@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="helpButtonFragment">
+  <!-- Help Button -->
+  <button type="button" class="btn btn-outline-secondary position-fixed"
+          style="bottom: 20px; right: 20px; z-index: 1050;"
+          data-bs-toggle="modal" data-bs-target="#helpModal">Need help?
+  </button>
+
+  <!-- Help Modal -->
+  <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="helpForm">
+          <div class="modal-header">
+            <h5 class="modal-title" id="helpModalLabel">Need Help?</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <input type="email" name="email" class="form-control mb-2" placeholder="Your email" required>
+            <textarea name="message" class="form-control" rows="4" placeholder="Your question" required></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast align-items-center text-white bg-success border-0 position-fixed bottom-0 end-0 m-3"
+       role="alert" aria-live="assertive" aria-atomic="true" style="display:none;">
+    <div class="d-flex">
+      <div class="toast-body" id="toastMessage">Message sent successfully!</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="hideToast()"></button>
+    </div>
+  </div>
+
+  <!-- AJAX Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('helpForm');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+
+        fetch('/help/send', {
+          method: 'POST',
+          body: formData
+        }).then(response => {
+          if (response.ok) {
+            showToast("✅ Your message was sent.");
+            form.reset();
+            bootstrap.Modal.getInstance(document.getElementById('helpModal')).hide();
+          } else {
+            response.text().then(msg => showToast("❌ Failed: " + msg, true));
+          }
+        }).catch(error => {
+          showToast("❌ Error: " + error.message, true);
+        });
+      });
+    });
+
+    function showToast(message, isError) {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      toastMessage.textContent = message;
+      toast.classList.remove('bg-success', 'bg-danger');
+      toast.classList.add(isError ? 'bg-danger' : 'bg-success');
+      toast.style.display = 'block';
+      setTimeout(() => toast.style.display = 'none', 4000);
+    }
+
+    function hideToast() {
+      document.getElementById('toast').style.display = 'none';
+    }
+  </script>
+</div>
+</body>
+</html>
