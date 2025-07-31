@@ -26,7 +26,7 @@ public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 0 9 * * ?")
     public void generateReservationNotifications() {
         LocalDate today = LocalDate.now();
 
@@ -59,6 +59,7 @@ public class NotificationService {
         notification.setCreatedAt(LocalDateTime.now());
         notification.setType(type);
         notification.setBorrowRecord(borrowRecord);
+        notification.setRead(false);
         notificationRepository.save(notification);
     }
 

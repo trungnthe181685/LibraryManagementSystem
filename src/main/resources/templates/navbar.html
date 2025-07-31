@@ -16,21 +16,40 @@
 			  <li class="nav-item dropdown">
 			      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
 			          <i class="bi bi-bell"></i>
-			          <span th:if="${notifications.size() > 0}" class="badge bg-danger">
-			              <span th:text="${notifications.size()}">0</span>
+			          <span th:if="${unreadNoti > 0}" class="badge bg-danger">
+			              <span th:text="${unreadNoti}">0</span>
 			          </span>
 			      </a>
 			      <ul class="dropdown-menu dropdown-menu-end">
 			          <li th:each="noti : ${notifications}">
-			              <a class="dropdown-item">
-			                  <span th:text="${noti.message}">Notification message</span>
-			                  <br/>
-			                  <small th:text="${#temporals.format(noti.createdAt, 'dd-MM-yyyy HH:mm')}"></small>
+			              <a class="dropdown-item" th:href="@{/profile(tab='notifications')}">
+							<div class="d-flex align-items-start">
+							            <!-- Book Image -->
+							            <img th:src="@{${noti.borrowRecord.reservation.book.imageURL}}" 
+							                 alt="Book Cover"
+							                 class="me-2"
+							                 style="width: 40px; height: 60px; object-fit: cover; border-radius: 4px;" />
+
+							            <!-- Message and Date -->
+							            <div>
+							                <span th:text="${noti.message}">Notification message</span><br/>
+							                <small th:text="${#temporals.format(noti.createdAt, 'dd-MM-yyyy HH:mm')}"></small>
+							            </div>
+							        </div>
 			              </a>
+						  
 			          </li>
+
 			          <li th:if="${notifications.isEmpty()}">
 			              <span class="dropdown-item text-muted">No notifications</span>
 			          </li>
+					  
+					  <li class="text-center border-top mt-1 pt-2">
+					        <a th:href="@{/profile(tab='notifications')}"
+					           class="btn btn-outline-primary btn-sm">
+					           <i class="bi bi-eye"></i> View All
+					        </a>
+					      </li>
 			      </ul>
 			  </li>
 

@@ -78,7 +78,7 @@ public class Notification {
 		this.borrowRecord = borrowRecord;
 	}
 
-	public boolean isRead() {
+	public boolean getRead() {
 		return isRead;
 	}
 
