@@ -54,5 +54,12 @@ public class GlobalControllerAdvice {
         return notificationRepo.findTop5ByUserOrderByCreatedAtDesc(user);
     }
 
-
+    @ModelAttribute("unreadNoti")
+    public long getUnreadNoti(@ModelAttribute("user") User user) {
+        if (user == null) return 0;
+        long unreadCount = notificationRepo.findByUser(user).stream()
+        	    .filter(n -> !n.getRead())
+        	    .count();
+        return unreadCount;
+    }
 }

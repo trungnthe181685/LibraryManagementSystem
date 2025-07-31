@@ -10,8 +10,6 @@ import com.example.openlibrary.model.Notification.NotificationType;
 import com.example.openlibrary.model.User;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-	List<Notification> findByUserAndIsReadFalse(User user);
-
     
     List<Notification> findByUser(User user);
     
@@ -20,5 +18,8 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     List<Notification> findByUserOrderByCreatedAtDesc(User user);
     
     List<Notification> findTop5ByUserOrderByCreatedAtDesc(User user);
+    
+    List<Notification> findByUserAndIsReadFalse(User user);
+
 
 }

@@ -165,7 +165,14 @@
 				<!-- Notifications Tab -->
 				<div class="col-md-9" th:if="${tab} == 'notifications'">
 				  <h4>My Notifications</h4>
-				  <p>Here are your recent system notifications:</p>
+				  <div class="d-flex justify-content-between align-items-center mb-2">
+				      <p class="mb-0">Here are your recent system notifications:</p>
+				      <form th:action="@{/notifications/mark-all-read}" method="post">
+				        <button type="submit" class="btn btn-sm btn-outline-primary">
+				          <i class="bi bi-check-all"></i> Mark All as Read
+				        </button>
+				      </form>
+				    </div>
 
 				  <table class="table table-striped">
 				    <thead>
@@ -176,7 +183,7 @@
 				      </tr>
 				    </thead>
 				    <tbody>
-				      <tr th:each="n : ${notifications}">
+				      <tr th:each="n : ${notifications}" th:classappend="${!n.read} ? 'table-warning'">
 				        <td th:text="${n.message}"></td>
 				        <td th:text="${#temporals.format(n.createdAt, 'dd MMM yyyy HH:mm')}"></td>
 				        <td>
