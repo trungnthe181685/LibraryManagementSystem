@@ -26,7 +26,7 @@ public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
-    @Scheduled(cron = "0 0 9 * * ?") // Every day at 9 AM
+    @Scheduled(cron = "0 * * * * ?")
     public void generateReservationNotifications() {
         LocalDate today = LocalDate.now();
 
@@ -41,7 +41,7 @@ public class NotificationService {
 
                 if (dueDate.isBefore(today)) {
                     createNotification(user, "Your reserved book is overdue!", borrowRecord, NotificationType.OVERDUE);
-                } else if (daysUntilDue == 2) {
+                } else if (daysUntilDue <= 2) {
                     createNotification(user, "Reminder: Your reserved book is due in 2 days.", borrowRecord, NotificationType.DUE_SOON);
                 }
 
