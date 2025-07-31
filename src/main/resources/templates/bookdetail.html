@@ -5,6 +5,7 @@
   <title th:text="${book.bookName}">Book Detail</title>
   <link rel="stylesheet" href="/css/kiet.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -43,7 +44,7 @@
 		</div>
 		
 		<form th:if="${book.availableCopies > 0}" th:action="@{/user/reservations/borrow/{id}(id=${book.bookID})}" method="post">
-			<button class="btn btn-outline-primary btn-sm" type="submit">
+			<button class="btn btn-outline-primary btn-sm mt-5" type="submit">
 											<i class="bi bi-book"></i> Borrow Book
 										</button>
 					</form>

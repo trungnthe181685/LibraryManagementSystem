@@ -61,8 +61,8 @@ public class PublicBookController {
         // Fetch similar books
         List<Book> similarBooks = bookService.findSimilarBooks(book);
         // Limit to 4
-        if (similarBooks.size() > 4) {
-            similarBooks = similarBooks.subList(0, 4);
+        if (similarBooks.size() > 3) {
+            similarBooks = similarBooks.subList(0, 3);
         }
 
 
