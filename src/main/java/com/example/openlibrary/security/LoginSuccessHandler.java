@@ -19,10 +19,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 										Authentication authentication) throws IOException, ServletException {
 		
 		for (GrantedAuthority auth : authentication.getAuthorities()) {
-			if (auth.getAuthority().equals("ROLE_admin")) {
+			if (auth.getAuthority().equals("ROLE_ADMIN")) {
 				response.sendRedirect("/admin/dashboard");
 				return;
-			} else if (auth.getAuthority().equals("ROLE_member")) {
+			} else if (auth.getAuthority().equals("ROLE_MEMBER")) {
 				response.sendRedirect("/home");
 				return;
 			}

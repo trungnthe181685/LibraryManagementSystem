@@ -35,7 +35,7 @@ public class User {
 	private String role = "member";
 	private LocalDate dob = LocalDate.of(2000, 01, 01);
 	private String gender = "male";
-	private String avatar = "default.jpg";
+	private String avatar = "/images/default.jpg";
 	private LocalDate createdDate = LocalDate.now();
 
 	

@@ -1,6 +1,7 @@
 <!-- fragments/navbar.html -->
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <th:block th:fragment="navbar">
       <nav class="navbar">
         <div class="nav-container">
@@ -55,13 +56,13 @@
 
               <a href="/categories" class="nav-link">Categories</a>
 			  <a href="/books" class="nav-link">Books</a>
-              <a href="/cart" class="nav-link"><i class="bi bi-cart"></i></a>
+              <a href="/admin" sec:authorize="hasRole('ADMIN')" class="nav-link"><i class="bi bi-journal"></i></a>
 
               <!-- User avatar + name -->
 			  <div class="profile d-flex align-items-center" onmouseenter="showMenu()" onmouseleave="hideMenu()">
 				<div class="profile-block d-flex align-items-center">
 				  	<img th:if="${user != null}" 
-				  	     th:src="@{/images/{avatar}(avatar=${user.avatar})}"
+				  	     th:src="@{${user.avatar}}"
 				  	     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; vertical-align: middle;" 
 				  	     alt="Avatar"/>
 				    <span th:text="${user.name}" class="ms-3"></span>
@@ -71,7 +72,8 @@
                 <div class="profile-menu text-start">
 					<div class="arrow-up"></div>
 	                  <a th:href="@{/profile}">My Profile</a>
-	                  <a th:href="@{/cart}">Reading</a>
+	                  <a th:href="@{/admin}"
+					  	 sec:authorize="hasRole('ADMIN')">Admin</a>
 	                  <a th:href="@{/logout}">Log Out</a>
                 </div>
               </div>

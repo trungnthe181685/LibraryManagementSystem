@@ -1,8 +1,14 @@
 package com.example.openlibrary.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.openlibrary.model.BorrowRecord;
@@ -45,11 +52,6 @@ public class UserDashboardController {
 	private NotificationRepository notificationRepository;
 	
 	
-	@GetMapping("/cart")
-	public String cart() {
-		return "cart";
-	}
-
 	@GetMapping("/profile")
 	public String profile(@RequestParam(value = "tab", defaultValue = "info") String tab,
 	                      Model model,
@@ -95,7 +97,7 @@ public class UserDashboardController {
 
 	@PostMapping("/profile/update")
 	public String updateProfile(@ModelAttribute("user") User updatedUser, @AuthenticationPrincipal Object principal,
-	                            RedirectAttributes redirectAttrs) {
+	                            RedirectAttributes redirectAttrs, @RequestParam("avatarFile") MultipartFile avatarFile) {
 		if (principal == null)
 	        return "redirect:/login";
 
@@ -120,7 +122,24 @@ public class UserDashboardController {
 	    user.setPhone(updatedUser.getPhone());
 	    user.setGender(updatedUser.getGender());
 	    user.setDob(updatedUser.getDob());
-	    user.setAvatar(updatedUser.getAvatar());
+	    if (!avatarFile.isEmpty()) {
+	        String fileName = UUID.randomUUID() + "_" + avatarFile.getOriginalFilename();
+	        Path uploadPath = Paths.get("images");
+	        try {
+		        if (!Files.exists(uploadPath)) {
+		            Files.createDirectories(uploadPath);
+		        }
+	
+		        Path filePath = uploadPath.resolve(fileName);
+		        Files.copy(avatarFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+	
+		        user.setAvatar("/images/" + fileName); 	
+	       }catch(IOException e) {
+	    	    e.printStackTrace();
+	    	    redirectAttrs.addFlashAttribute("error", "Failed to upload profile picture.");
+	    	    return "redirect:/profile";
+	       }
+	    }
 	    if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
 	        user.setPassword(updatedUser.getPassword());
 	    }
