@@ -39,7 +39,7 @@
 			    <!-- Sidebar -->
 			    <div class="col-md-3 sidebar">
 			      <div class="mb-4 d-flex align-items-center">
-			        <img th:src="@{/images/{avatar}(avatar=${user.avatar})}" class="avatar me-2" alt="avatar">
+			        <img th:src="@{${user.avatar}}" class="avatar me-2" alt="avatar">
 			      </div>
 				  <ul class="nav flex-column">
 				      <li><a class="nav-link [[${tab}=='info' ? 'active' : '']]" href="/profile?tab=info">Profile</a></li>
@@ -87,7 +87,7 @@
 			          </div>
 
 			          <div class="col-md-4 text-center">
-			            <img th:src="@{/images/{avatar}(avatar=${user.avatar})}" class="avatar mb-2" alt="avatar">
+			            <img th:src="@{${user.avatar}}" class="avatar mb-2" alt="avatar">
 			            <div class="mb-2">
 			              <input type="file" name="avatarFile" class="form-control">
 			            </div>
