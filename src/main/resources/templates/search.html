@@ -16,20 +16,47 @@
 			  <p>You searched for: <strong th:text="${query}">query</strong></p>
 
 			  <div th:if="${#lists.isEmpty(results)}">
-			    <p>No books found.</p>
+			      <p th:if="${query != null}">No results found for "<b th:text="${query}"></b>"</p>
+			      <p th:if="${query == null or query.trim().isEmpty()}">Please enter a search term.</p>
 			  </div>
+			  
 
 			  <div class="book-list" th:unless="${#lists.isEmpty(results)}">
 			    <div class="book-card" th:each="book : ${results}">
 			      <a th:href="@{'/books/' + ${book.bookID}}">
 			        <img th:src="${book.imageURL}" alt="Cover" class="book-cover" />
-			        <h3 th:text="${book.bookName}">Book Name</h3>
-			      </a>
-			      <p th:text="${book.author.authorName}">Author</p>
-			    </div>
+				</a>
+				  <div class="book-info">
+					<h3 th:text="${book.bookName}">Book Name</h3><br>
+					<div style="display: flex; gap:20px;">
+						<strong>Author:</strong>
+						<p th:text="${book.author.authorName != null ? book.author.authorName : 'N/A'}"></p>
+					</div>
+
+					<div>
+						<strong>Description:</strong>
+						<p th:text="${book.description != null ? book.description : 'N/A'}"></p>
+					</div>
+					<div style="display: flex; gap:20px;">
+						<strong>Available:</strong>
+						<p th:text="${book.availableCopies != null ? book.availableCopies : 'N/A'}"></p>
+					</div>
+					<div class="button-bookdetail">
+						<form th:if="${book.availableCopies > 0}" th:action="@{/user/reservations/borrow/{id}(id=${book.bookID})}" method="post">
+							<button class="btn btn-outline-primary btn-sm mt-5" type="submit">
+								<i class="bi bi-book"></i> Borrow Book
+							</button>
+						</form>
+						
+						<a th:href="@{/books/{id}(id=${book.bookID})}">
+						    <button class="btn btn-outline-primary btn-sm mt-5" type="submit">Read more</button>
+						</a>
+					</div>
+				  </div>
+				  </div>
 			  </div>
 			</div>
-
+			
 <div th:replace="help-button :: helpButtonFragment"></div>
 </body>
 </html>
