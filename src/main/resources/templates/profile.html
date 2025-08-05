@@ -102,7 +102,7 @@
 				  <h4>My Reservations</h4>
 				  <p>List of your current reservations and borrow records.</p>
 
-				  <table>
+				  <table class="table table-striped table-bordered" style="width: 100%;">
 				    <thead>
 				      <tr>
 				        <th>ID</th>
@@ -114,53 +114,56 @@
 				      </tr>
 				    </thead>
 				    <tbody>
-				  	<div th:each="r : ${reservations}">
-				      <tr>
-				        <td th:text="${r.reservationID}"></td>
-				        <td th:text="${r.book.bookName}"></td>
-				        <td th:text="${r.user.name}"></td>
-				        <td th:text="${r.createdDate}"></td>
-				        <td th:text="${r.status}"></td>
-				        <td>
-				          <div style="gap: 6px; display: flex;">
-				  			 <button type="button" class="btn btn-info" style="width: 120px;"
-				  			         th:onclick="'toggleRecords(' + ${r.reservationID} + ')'">Show Records</button>
-							<a th:href="@{/user/reservations/cancel-reservation/{id}(id=${r.reservationID})}" class="btn btn-danger" style="width: 120px;">Cancel</a> 
+				      <!-- This loop contains BOTH rows per reservation -->
+				      <th:block th:each="r : ${reservations}">
+				        <!-- Main reservation row -->
+				        <tr>
+				          <td th:text="${r.reservationID}"></td>
+				          <td th:text="${r.book.bookName}"></td>
+				          <td th:text="${r.user.name}"></td>
+				          <td th:text="${r.createdDate}"></td>
+				          <td th:text="${r.status}"></td>
+				          <td>
+				            <div style="gap: 6px; display: flex;">
+				              <button type="button" class="btn btn-info" style="width: 120px;"
+				                      th:onclick="'toggleRecords(' + ${r.reservationID} + ')'">Show Records</button>
+				              <a th:href="@{/user/reservations/cancel-reservation/{id}(id=${r.reservationID})}"
+				                 class="btn btn-danger" style="width: 120px;">Cancel</a>
+				            </div>
+				          </td>
+				        </tr>
 
-				          </div>
-				        </td>
-				      </tr>
-
-				      <!-- Hidden row for borrow records (same loop) -->
-				      <tr th:id="'records-' + ${r.reservationID}" style="display: none;" >
-				        <td colspan="6">
-				          <table class="table table-bordered">
-				            <thead>
-				              <tr>
-				                <th>Borrow ID</th>
-				                <th>Borrow Date</th>
-				                <th>Due Date</th>
-				                <th>Return Date</th>
-				                <th>Status</th>
-				            </thead>
-				  		  <tbody>
-				  		    <tr th:each="record : ${recordsMap[r.reservationID]}">
-				  		      <td th:text="${record.borrowID}"></td>
-				  		      <td th:text="${record.borrowDate}"></td>
-				  		      <td th:text="${record.dueDate}"></td>
-				  		      <td th:text="${record.returnDate}"></td>
-				  		      <td th:text="${record.status}"></td>
-				  		    </tr>
-				  		  </tbody>
-
-				          </table>
-				        </td>
-				      </tr>
-				  	</div>
+				        <!-- Hidden row for borrow records -->
+				        <tr th:id="'records-' + ${r.reservationID}" style="display: none;">
+				          <td colspan="6">
+				            <table class="table table-bordered" style="width: 100%;">
+				              <thead>
+				                <tr>
+				                  <th>Borrow ID</th>
+				                  <th>Borrow Date</th>
+				                  <th>Due Date</th>
+				                  <th>Return Date</th>
+				                  <th>Status</th>
+				                </tr>
+				              </thead>
+				              <tbody>
+				                <tr th:each="record : ${recordsMap[r.reservationID]}">
+				                  <td th:text="${record.borrowID}"></td>
+				                  <td th:text="${record.borrowDate}"></td>
+				                  <td th:text="${record.dueDate}"></td>
+				                  <td th:text="${record.returnDate}"></td>
+				                  <td th:text="${record.status}"></td>
+				                </tr>
+				              </tbody>
+				            </table>
+				          </td>
+				        </tr>
+				      </th:block>
 				    </tbody>
-
 				  </table>
 				</div>
+
+
 
 				<!-- Notifications Tab -->
 				<div class="col-md-9" th:if="${tab} == 'notifications'">
