@@ -57,6 +57,7 @@ public class security_config {
             )
             .csrf(csrf -> csrf
             	    .ignoringRequestMatchers("/admin/publishers/delete-publisher/**")
+            	    .ignoringRequestMatchers("/help/send")
             	)
             .oauth2Login(oauth2 -> oauth2
                 .loginPage("/index")

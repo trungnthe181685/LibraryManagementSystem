@@ -30,6 +30,7 @@
   <table class="table table-bordered table-striped">
     <thead class="table-light">
     <tr>
+	  <th>No.</th>
       <th>Title</th>
       <th>Author</th>
       <th>Description</th>
@@ -45,6 +46,7 @@
     </thead>
     <tbody>
     <tr th:each="book : ${books}">
+		<td th:text="${book.bookID}"></td>
       <td th:text="${book.bookName}"></td>
       <td th:text="${book.author != null ? book.author.authorName : 'N/A'}"></td>
       <td th:text="${book.description}"></td>
