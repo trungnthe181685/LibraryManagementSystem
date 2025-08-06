@@ -265,7 +265,7 @@ nav-link:hover{
 	
 .product-card.detail img {
 	display: block;
-	width: 215px;
+	width: 100%;
 	height: 270px;
 }
 
@@ -559,6 +559,10 @@ nav-link:hover{
   text-decoration: none;
 }
 
+.book-author:hover {
+	color: gainsboro;
+}
+
 .book-price {
   font-size: 1.5em;
   color: #333;
@@ -644,6 +648,7 @@ nav-link:hover{
 .book-categories {
     display: flex;
     gap: 20px;
+	flex-wrap:nowrap;
 }
 
 a.category-label {
