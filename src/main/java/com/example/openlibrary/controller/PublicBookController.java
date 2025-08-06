@@ -7,6 +7,9 @@ import java.util.List;
 import com.example.openlibrary.model.*;
 import com.example.openlibrary.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -102,24 +105,20 @@ public class PublicBookController {
             @RequestParam(required = false) Long authorId,
             @RequestParam(required = false) List<Long> categoryIds,
             @RequestParam(required = false) String sortBy,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
             Model model) {
-
-        Sort sort = Sort.unsorted();
-
-        if ("latest".equals(sortBy)) {
-            sort = Sort.by(Sort.Direction.DESC, "publishedDate");
-        } else if ("oldest".equals(sortBy)) {
-            sort = Sort.by(Sort.Direction.ASC, "publishedDate");
-        } else if ("popularity".equals(sortBy)) {
-            sort = Sort.by(Sort.Direction.DESC, "reservations.size"); // May vary based on entity structure
-        }
 
         Long catSize = (categoryIds != null) ? (long) categoryIds.size() : null;
 
-        List<Book> books = bookRepository.searchBooksAllFilters(
-        		title, authorId, categoryIds, catSize, sortBy);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> bookPage = bookRepository.searchBooksAllFilters(title, authorId, categoryIds, catSize, sortBy, pageable);
 
-        model.addAttribute("books", books);
+        model.addAttribute("books", bookPage.getContent());
+        model.addAttribute("currentPage", bookPage.getNumber());
+        model.addAttribute("totalPages", bookPage.getTotalPages());
+        model.addAttribute("totalItems", bookPage.getTotalElements());
+        model.addAttribute("pageSize", size);
         model.addAttribute("authors", authorRepository.findAll());
         model.addAttribute("categories", bookCategoryRepository.findAll());
         model.addAttribute("selectedbookName", title);
@@ -129,7 +128,6 @@ public class PublicBookController {
 
         return "book-list";
     }
-
 
 
 
