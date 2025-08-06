@@ -69,7 +69,26 @@
 	<hr class="divider"/>
 <!-- Random Books Section -->
 <section class="products">
-    <h2 style="margin-bottom: 40px;">Recommended Books</h2>
+	<div class="categories-header">
+		<h2 style="margin-bottom: 40px;">Recommended Books</h2>
+			<a href="/books" class="button1" style="--clr: #7808d0">
+					      <span class="button__icon-wrapper">
+					        <svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"
+			                     class="button__icon-svg" width="10">
+					          <path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488
+					           1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor"></path>
+					        </svg>
+					        <svg viewBox="0 0 14 15" fill="none" width="10"
+			                     xmlns="http://www.w3.org/2000/svg"
+			                     class="button__icon-svg button__icon-svg--copy">
+					          <path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488
+					           1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor"></path>
+					        </svg>
+					      </span>
+			            Explore All
+			        </a>
+	</div>
+    
     <div class="product-grid">
         <th:block th:each="book : ${randomBooks}">
             <div class="product-card">
@@ -93,7 +112,25 @@
 	<hr class="divider"/>
 <!-- Popular Books Section -->
 <section class="products">
-    <h2 style="margin-bottom: 40px;">Popular Books</h2>
+	<div class="categories-header">
+			<h2 style="margin-bottom: 40px;">Popular Books</h2>
+				<a href="/books" class="button1" style="--clr: #7808d0">
+						      <span class="button__icon-wrapper">
+						        <svg viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"
+				                     class="button__icon-svg" width="10">
+						          <path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488
+						           1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor"></path>
+						        </svg>
+						        <svg viewBox="0 0 14 15" fill="none" width="10"
+				                     xmlns="http://www.w3.org/2000/svg"
+				                     class="button__icon-svg button__icon-svg--copy">
+						          <path d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488
+						           1.488 9.432-9.432-.048 6.912 2.304.024z" fill="currentColor"></path>
+						        </svg>
+						      </span>
+				            Explore All
+				        </a>
+		</div>
     <div class="product-grid">
         <th:block th:each="book : ${popularBooks}">
             <div class="product-card">
@@ -115,18 +152,9 @@
     </div>
 </section>
 
-<!-- Newsletter -->
-<section class="newsletter">
-    <h2>Subscribe for Updates</h2>
-    <p>Get deals and latest book news directly to your inbox.</p>
-    <form class="newsletter-form">
-        <input type="email" placeholder="Enter your email">
-        <button type="submit">Subscribe</button>
-    </form>
-</section>
-<div th:replace="help-button :: helpButtonFragment"></div>
+
 <!-- Footer -->
-<footer class="footer">
+<footer style="margin-top: 100px" class="footer">
     <p>&copy; 2025 OpenLibrary. All rights reserved.</p>
 </footer>
 

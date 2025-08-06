@@ -12,6 +12,8 @@ import com.example.openlibrary.repository.PublisherRepository;
 import com.example.openlibrary.repository.ReservationRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Pageable;
 
 @Controller
 @RequestMapping("/admin/books")
@@ -47,15 +50,29 @@ public class AdminBookController {
 	private PublisherRepository publisherRepository;
 
 	@GetMapping
-	public String showBooks(Model model) {
-		List<Book> books = bookRepository.findAll();
-		model.addAttribute("books", books);
-		model.addAttribute("book", new Book());
-		model.addAttribute("authors", authorRepository.findAll());
-		model.addAttribute("categories", categoryRepository.findAll());
-		model.addAttribute("publishers", publisherRepository.findAll());
-		return "admin/books";
-	}
+    public String showBooks(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) Long authorId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            Model model) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> bookPage = bookRepository.searchBooksByTitleAndAuthor(title, authorId, pageable);
+
+        model.addAttribute("books", bookPage.getContent());
+        model.addAttribute("book", new Book());
+        model.addAttribute("authors", authorRepository.findAll());
+        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("publishers", publisherRepository.findAll());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", bookPage.getTotalPages());
+        model.addAttribute("totalItems", bookPage.getTotalElements());
+        model.addAttribute("pageSize", size);
+        model.addAttribute("selectedbookName", title);
+        model.addAttribute("selectedAuthorId", authorId);
+
+        return "admin/books";
+    }
 
 	@PostMapping("/add")
 	public String addBook(@RequestParam("authorID") Long authorID, @RequestParam("publisherID") Long publisherID,
