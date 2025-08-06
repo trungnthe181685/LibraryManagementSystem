@@ -85,7 +85,7 @@
 <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <form th:action="@{/admin/books/add}" method="post" enctype="multipart/form-data">
+      <form th:action="@{/admin/books/add}" method="post">
         <div class="modal-header">
           <h5 class="modal-title">Add New Book</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -144,8 +144,8 @@
           </div>
 
           <div class="mb-3 col-md-12">
-            <label for="image" class="form-label">Image</label>
-            <input type="file" class="form-control" name="image" accept="image/*">
+            <label for="imageURL" class="form-label">Image URL</label>
+            <input type="text" class="form-control" name="imageURL">
           </div>
 
         </div>
@@ -162,7 +162,7 @@
 <div class="modal fade" th:each="book : ${books}" th:id="'editBookModal-' + ${book.bookID}" tabindex="-1" aria-labelledby="editBookModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <form th:action="@{'/admin/books/edit/' + ${book.bookID}}" method="post" enctype="multipart/form-data">
+      <form th:action="@{'/admin/books/edit/' + ${book.bookID}}" method="post">
         <div class="modal-header">
           <h5 class="modal-title">Edit Book</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -232,8 +232,8 @@
           </div>
 
           <div class="mb-3 col-md-12">
-			<label for="image" class="form-label">Book Image</label>
-			<input type="file" name="image" class="form-control" accept="image/*">
+			<label for="imageURL" class="form-label">Book Image</label>
+			<input type="text" th:value="${book.imageURL}" name="imageURL" class="form-control">
           </div>
 
         </div>

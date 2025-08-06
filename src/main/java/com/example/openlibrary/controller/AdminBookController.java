@@ -60,31 +60,18 @@ public class AdminBookController {
 	@PostMapping("/add")
 	public String addBook(@RequestParam("authorID") Long authorID, @RequestParam("publisherID") Long publisherID,
 			@RequestParam(value = "categories", required = false) List<Long> bookCategoryID, @ModelAttribute Book book,
-			@RequestParam("image") MultipartFile imageFile,
 			RedirectAttributes redirectAttributes) {
 
 		Author author = authorRepository.findById(authorID).orElse(null);
 		Publisher publisher = publisherRepository.findById(publisherID).orElse(null);
 		List<BookCategory> categories = (bookCategoryID != null) ? categoryRepository.findAllById(bookCategoryID)
 				: new ArrayList<>();
-		try {
-	        if (!imageFile.isEmpty()) {
-	            String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
-	            Path imagePath = Paths.get("src/main/resources/static/images/" + fileName);
-	            Files.createDirectories(imagePath.getParent());
-	            Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-	            book.setImageURL("/images/" + fileName);
-	        	}
-			} catch (IOException e) {
-				redirectAttributes.addFlashAttribute("toastMessage", "Image upload failed!");
-				e.printStackTrace();
-			}
+
 		book.setAuthor(author);
 		book.setPublisher(publisher);
 		book.setCategories(categories);
 		book.setAvailableCopies(book.getTotalCopies());
 		book.setStock(book.getAvailableCopies() > 0 ? "In Stock" : "Out of Stock");
-
 		// 🔥 rentalPrice already populated by @ModelAttribute
 
 		bookRepository.save(book);
@@ -98,7 +85,6 @@ public class AdminBookController {
 			@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate publishedDate,
 			@RequestParam("publisherID") Long publisherID, @RequestParam String imageURL, @RequestParam Long authorID,
 			@RequestParam(required = false) List<Long> categories,
-			@RequestParam("image") MultipartFile imageFile, 
 			RedirectAttributes redirectAttributes) {
 
 		Optional<Book> optionalBook = bookRepository.findById(id);
@@ -109,18 +95,7 @@ public class AdminBookController {
 		
 		Publisher publisher = publisherRepository.findById(publisherID).orElse(null);
 		Book book = optionalBook.get();
-		try {
-	        if (!imageFile.isEmpty()) {
-	            String fileName = UUID.randomUUID() + "_" + imageFile.getOriginalFilename();
-	            Path imagePath = Paths.get("src/main/resources/static/images/" + fileName);
-	            Files.createDirectories(imagePath.getParent());
-	            Files.copy(imageFile.getInputStream(), imagePath, StandardCopyOption.REPLACE_EXISTING);
-	            book.setImageURL("/images/" + fileName);
-	        	}
-			} catch (IOException e) {
-				redirectAttributes.addFlashAttribute("toastMessage", "Image upload failed!");
-				e.printStackTrace();
-			}
+
 		book.setBookName(bookName);
 		book.setDescription(description);
 		book.setTotalCopies(totalCopies);
