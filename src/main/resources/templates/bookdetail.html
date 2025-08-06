@@ -32,8 +32,14 @@
         <p class="book-description" th:text="${book.description}">
           Book description goes here...
         </p>
-		<h3 class="book-publisher" th:text="${book.publisher != null ? 'Published by: ' + book.publisher.name : 'N/A'}"> </h3>
-		<h3 class="book-published-date" th:text="${book.publishedDate != null ? ' Published date: ' + book.publishedDate : 'N/A'}"> </h3>
+		<div style="display: flex; gap:20px;">
+			<strong>Published by:</strong>
+			<p th:text="${book.publisher != null ? book.publisher.name : 'N/A'}"></p>
+		</div>
+		<div style="display: flex; gap:20px;">
+			<strong>Published in:</strong>
+			<p th:text="${book.publishedDate != null ? book.publishedDate : 'N/A'}"></p>
+		</div>
 		<div class="book-categories">
 		        <strong>Categories:</strong>
 				<a th:each="category : ${book.categories}"
@@ -43,8 +49,10 @@
 						</a>
 		</div>
 		
-		<form th:if="${book.availableCopies > 0}" th:action="@{/user/reservations/borrow/{id}(id=${book.bookID})}" method="post">
-			<button class="btn btn-outline-primary btn-sm mt-5" type="submit">
+		<form th:action="@{/user/reservations/borrow/{id}(id=${book.bookID})}" method="post">
+			<button class="btn btn-outline-primary btn-sm mt-5" 
+					type="submit"
+					th:disabled="${book.availableCopies < 1}">
 				<i class="bi bi-book"></i> Borrow Book
 			</button>
 		</form>
@@ -55,12 +63,12 @@
 	    <h2>Similar Books</h2>
 		<div class="product-grid">
 		    <th:block th:each="b : ${similarBooks}">
-		        <div class="product-card">
+		        <div class="product-card detail">
 					<a th:href="@{/books/{id}(id=${b.bookID})}">
-						<img height="250px" th:src="@{${b.imageURL}}" alt="Book Cover">
+						<img th:src="@{${b.imageURL}}" alt="Book Cover">
 					</a>
 		            
-		            <h3 th:text="${b.bookName}">Book Title</h3>
+		            <h5 th:text="${b.bookName}">Book Title</h5>
 		            <a th:href="@{/books/{id}(id=${b.bookID})}" class="readmore-btn">
 		                <!-- SVGs and text stay the same -->
 		                <span class="text">Read more</span>
@@ -75,11 +83,11 @@
 	    <h2>More Books by the Same Author</h2>
 	    <div class="product-grid">
 	        <th:block th:each="b : ${sameAuthorBooks}">
-	            <div class="product-card">
+	            <div class="product-card detail">
 	                <a th:href="@{/books/{id}(id=${b.bookID})}">
-	                    <img height="250px" th:src="@{${b.imageURL}}" alt="Book Cover">
+	                    <img th:src="@{${b.imageURL}}" alt="Book Cover">
 	                </a>
-	                <h3 th:text="${b.bookName}">Book Title</h3>
+	                <h5 th:text="${b.bookName}">Book Title</h5>
 	                <a th:href="@{/books/{id}(id=${b.bookID})}" class="readmore-btn">
 	                    <span class="text">Read more</span>
 	                </a>

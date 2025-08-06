@@ -84,13 +84,19 @@ public class PublicBookController {
 
 
     @GetMapping("/search")
-    public String searchBooks(@RequestParam("query") String query, Model model) {
-        List<Book> results = bookService.searchByKeyword(query); // You’ll create this method
+    public String searchBooks(@RequestParam(value = "query", required = false) String query, Model model) {
+        List<Book> results;
+
+        if (query == null || query.trim().isEmpty()) {
+            results = List.of(); 
+        } else {
+            results = bookService.searchByKeyword(query);
+        }
+
         model.addAttribute("query", query);
         model.addAttribute("results", results);
-        return "search"; // Your Thymeleaf HTML
+        return "search";
     }
-
     
 
     @GetMapping("/books")
